@@ -43,6 +43,7 @@ const GetAllThreads = async (req, res) => {
     let id = parseInt(req.params.sub_id);
     const threads = await Thread.findAll({
       where: { sub_id: id },
+      order: [["point", "DESC"]],
       include: [{ model: User, attributes: ["id, user_name"] }],
     });
     res.send(threads);
@@ -61,9 +62,30 @@ const GetThread = async (req, res) => {
         {
           model: Comments,
           include: [{ model: User, attributes: ["id", "user_name"] }],
+          order: [["createdAt", "DESC"]],
         },
       ],
     });
+    res.send(thread);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const LikeThread = async (req, res) => {
+  try {
+    let id = parseInt(req.params.thread_id);
+    const thread = await Thread.increment({ points: 1 }, { where: { id: id } });
+    res.send(thread);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const UnlikeThread = async (req, res) => {
+  try {
+    let id = parseInt(req.params.thread_id);
+    const thread = await Thread.increment({ points: 1 }, { where: { id: id } });
     res.send(thread);
   } catch (error) {
     throw error;
@@ -76,4 +98,6 @@ module.exports = {
   DeleteThread,
   GetAllThreads,
   GetThread,
+  LikeThread,
+  UnlikeThread,
 };
