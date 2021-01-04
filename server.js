@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, "client", "build")));
 
 app.disable("X-Powered-By");
 
-app.get("/", (req, res) => res.send({ msg: "Petsagram Server Working" }));
+app.get("/", (req, res) => res.send({ msg: "Reddit Server Working" }));
 app.use("/api", AppRouter);
 
 app.get("*", (req, res) =>
