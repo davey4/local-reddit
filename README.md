@@ -49,7 +49,7 @@ Deployment coming soon!
 
 ### Component Hierarchy Diagram
 
-<!-- ![Component Hierarchy Diagram]() -->
+![Component Hierarchy Diagram](https://lucid.app/publicSegments/view/0b0e2ab6-9a17-4d1b-948b-71ec3584ba81/image.png)
 
 ---
 
