@@ -50,7 +50,7 @@ const Router = (props) => {
             exact
             path="/"
             component={() => (
-              <Layout>
+              <Layout currentUser={currentUser} {...props}>
                 <Home />
               </Layout>
             )}
@@ -58,7 +58,7 @@ const Router = (props) => {
           <Route
             path="/signup"
             component={(props) => (
-              <Layout>
+              <Layout currentUser={currentUser} {...props}>
                 <Signup {...props} />
               </Layout>
             )}
@@ -66,7 +66,7 @@ const Router = (props) => {
           <Route
             path="/login"
             component={(props) => (
-              <Layout>
+              <Layout currentUser={currentUser} {...props}>
                 <Login toggleAuthenticated={toggleAuthenticated} {...props} />
               </Layout>
             )}
@@ -74,7 +74,7 @@ const Router = (props) => {
           <Route
             path="/sub"
             component={(props) => (
-              <Layout>
+              <Layout currentUser={currentUser} {...props}>
                 <Sub {...props} />
               </Layout>
             )}
@@ -82,7 +82,7 @@ const Router = (props) => {
           <Route
             path="/threads"
             component={(props) => (
-              <Layout>
+              <Layout currentUser={currentUser} {...props}>
                 <Threads {...props} />
               </Layout>
             )}

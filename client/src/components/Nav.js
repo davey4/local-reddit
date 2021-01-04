@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -8,9 +8,9 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { Link } from "react-router-dom";
-// import InboxIcon from "@material-ui/icons/MoveToInbox";
-// import MailIcon from "@material-ui/icons/Mail";
+import MenuIcon from "@material-ui/icons/Menu";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import HomeIcon from "@material-ui/icons/Home";
 
 const useStyles = makeStyles({
   list: {
@@ -29,6 +29,24 @@ export default function Nav(props) {
     bottom: false,
     right: false,
   });
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    setUser(props.currentUser);
+  }, []);
+
+  const pushToLogin = () => {
+    props.history.push("/login");
+  };
+
+  const pushToHome = () => {
+    props.history.push("/");
+  };
+
+  const logout = () => {
+    props.history.push("/");
+    localStorage.clear();
+  };
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -51,27 +69,30 @@ export default function Nav(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <div>hi</div> : <div>hi</div>}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem button onClick={pushToHome}>
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="Home" />
+        </ListItem>
       </List>
       <Divider />
       <List>
-        <ListItem>
-          <Link to="/signup">
-            <ListItemText primary="Sign Up" />
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link to="/login">
-            <ListItemText primary="Login" />
-          </Link>
-        </ListItem>
+        {user ? (
+          <ListItem button onClick={logout}>
+            <ListItemIcon>
+              <AccountCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="logout" />
+          </ListItem>
+        ) : (
+          <ListItem button onClick={pushToLogin}>
+            <ListItemIcon>
+              <AccountCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="login" />
+          </ListItem>
+        )}
       </List>
     </div>
   );
@@ -80,7 +101,9 @@ export default function Nav(props) {
     <div>
       {["left"].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          <Button onClick={toggleDrawer(anchor, true)}>
+            <MenuIcon />
+          </Button>
           <Drawer
             anchor={anchor}
             open={state[anchor]}
