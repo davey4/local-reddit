@@ -17,9 +17,9 @@ const CreateThread = async (req, res) => {
 
 const UpdateThread = async (req, res) => {
   try {
-    const subId = parseInt(req.params.sub_id);
+    const id = parseInt(req.params.thread_id);
     const updatedThread = await Thread.update(req.body.content, {
-      where: { id: subId },
+      where: { id: id },
       returning: true,
     });
     res.send(updatedThread);
