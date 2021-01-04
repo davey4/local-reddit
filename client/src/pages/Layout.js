@@ -1,11 +1,11 @@
 import React from "react";
 import Nav from "../components/Nav";
 
-const Layout = ({ children, currentUser, ...props }) => {
+const Layout = ({ children, currentUser, verify, ...props }) => {
   return (
     <div className="layout-grid">
       <div>
-        <Nav currentUser={currentUser} {...props} />
+        <Nav currentUser={currentUser} verify={verify} {...props} />
         {children}
       </div>
     </div>

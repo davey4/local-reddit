@@ -8,6 +8,7 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Sub from "../pages/Sub";
 import Threads from "../pages/Threads";
+import Forum from "../pages/Forum";
 
 const Router = (props) => {
   const [loading, updateLoading] = useState(true);
@@ -24,12 +25,16 @@ const Router = (props) => {
     if (token) {
       try {
         const session = await __CheckSession();
+        console.log(session);
         setCurrentUser(session.user.id);
         setAuthenticated(true);
         props.history.push("/");
       } catch (error) {
         localStorage.clear();
       }
+    } else {
+      setCurrentUser();
+      setAuthenticated(false);
     }
   };
 
@@ -48,7 +53,11 @@ const Router = (props) => {
             exact
             path="/"
             component={() => (
-              <Layout currentUser={currentUser} {...props}>
+              <Layout
+                currentUser={currentUser}
+                verify={verifyTokenValid}
+                {...props}
+              >
                 <Home />
               </Layout>
             )}
@@ -56,7 +65,11 @@ const Router = (props) => {
           <Route
             path="/signup"
             component={(props) => (
-              <Layout currentUser={currentUser} {...props}>
+              <Layout
+                currentUser={currentUser}
+                verify={verifyTokenValid}
+                {...props}
+              >
                 <Signup toggleAuthenticated={toggleAuthenticated} {...props} />
               </Layout>
             )}
@@ -64,7 +77,11 @@ const Router = (props) => {
           <Route
             path="/login"
             component={(props) => (
-              <Layout currentUser={currentUser} {...props}>
+              <Layout
+                currentUser={currentUser}
+                verify={verifyTokenValid}
+                {...props}
+              >
                 <Login toggleAuthenticated={toggleAuthenticated} {...props} />
               </Layout>
             )}
@@ -72,7 +89,11 @@ const Router = (props) => {
           <Route
             path="/sub"
             component={(props) => (
-              <Layout currentUser={currentUser} {...props}>
+              <Layout
+                currentUser={currentUser}
+                verify={verifyTokenValid}
+                {...props}
+              >
                 <Sub {...props} />
               </Layout>
             )}
@@ -80,8 +101,24 @@ const Router = (props) => {
           <Route
             path="/threads"
             component={(props) => (
-              <Layout currentUser={currentUser} {...props}>
-                <Threads {...props} />
+              <Layout
+                currentUser={currentUser}
+                verify={verifyTokenValid}
+                {...props}
+              >
+                <Threads currentUser={currentUser} {...props} />
+              </Layout>
+            )}
+          />
+          <Route
+            path="/forum"
+            component={(props) => (
+              <Layout
+                currentUser={currentUser}
+                verify={verifyTokenValid}
+                {...props}
+              >
+                <Forum currentUser={currentUser} {...props} />
               </Layout>
             )}
           />

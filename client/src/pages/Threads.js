@@ -5,8 +5,14 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
-import { __GetAllThreads } from "../services/ThreadServices";
+import {
+  __GetAllThreads,
+  __UpVoteThread,
+  __DownVoteThread,
+} from "../services/ThreadServices";
 
 const useStyles = makeStyles({
   root: {
@@ -22,7 +28,6 @@ const useStyles = makeStyles({
 
 const Threads = (props) => {
   const classes = useStyles();
-  console.log(props);
   const [threads, setThreads] = useState([]);
 
   useEffect(() => {
@@ -38,9 +43,31 @@ const Threads = (props) => {
     }
   };
 
+  const upVote = async (id) => {
+    try {
+      await __UpVoteThread(id);
+      getThreads();
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const downVote = async (id) => {
+    try {
+      await __DownVoteThread(id);
+      getThreads();
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const onClick = (id) => {
-    // e.preventDefault();
-    console.log(id);
+    // console.log(id);
+    let location = {
+      pathname: "/forum",
+      state: id,
+    };
+    props.history.push(location);
   };
 
   return (
@@ -67,6 +94,17 @@ const Threads = (props) => {
             </Typography>
           </CardContent>
           <CardActions>
+            <Typography>{el.points}</Typography>
+            {props.currentUser ? (
+              <div>
+                <Button size="small" onClick={() => upVote(el.id)}>
+                  <ArrowDropUpIcon />
+                </Button>
+                <Button size="small" onClick={() => downVote(el.id)}>
+                  <ArrowDropDownIcon />
+                </Button>
+              </div>
+            ) : null}
             <Button size="small" onClick={() => onClick(el.id)}>
               See replies
             </Button>

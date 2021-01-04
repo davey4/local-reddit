@@ -1,4 +1,4 @@
-const { Thread, User } = require("../models");
+const { Thread, User, Comments } = require("../models");
 
 const CreateThread = async (req, res) => {
   try {
@@ -59,11 +59,11 @@ const GetThread = async (req, res) => {
       where: { id: id },
       include: [
         { model: User, attrbutes: ["id", "user_name"] },
-        // {
-        // model: Comments,
-        // include: [{ model: User, attributes: ["id", "user_name"] }],
-        // order: [["createdAt", "DESC"]],
-        // },
+        {
+          model: Comments,
+          include: [{ model: User, attributes: ["id", "user_name"] }],
+          order: [["createdAt", "DESC"]],
+        },
       ],
     });
     res.send(thread);
