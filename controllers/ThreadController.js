@@ -1,4 +1,4 @@
-const { Thread } = require("../models");
+const { Thread, User } = require("../models");
 
 const CreateThread = async (req, res) => {
   try {
@@ -43,8 +43,8 @@ const GetAllThreads = async (req, res) => {
     let id = parseInt(req.params.sub_id);
     const threads = await Thread.findAll({
       where: { sub_id: id },
-      order: [["point", "DESC"]],
-      include: [{ model: User, attributes: ["id, user_name"] }],
+      order: [["points", "DESC"]],
+      include: [{ model: User, attributes: ["id", "user_name"] }],
     });
     res.send(threads);
   } catch (error) {
@@ -59,11 +59,11 @@ const GetThread = async (req, res) => {
       where: { id: id },
       include: [
         { model: User, attrbutes: ["id", "user_name"] },
-        {
-          model: Comments,
-          include: [{ model: User, attributes: ["id", "user_name"] }],
-          order: [["createdAt", "DESC"]],
-        },
+        // {
+        // model: Comments,
+        // include: [{ model: User, attributes: ["id", "user_name"] }],
+        // order: [["createdAt", "DESC"]],
+        // },
       ],
     });
     res.send(thread);
