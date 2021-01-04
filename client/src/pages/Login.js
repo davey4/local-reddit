@@ -1,27 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { __LoginUser } from "../services/UserServices";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,8 +31,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn(props) {
   const classes = useStyles();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [formError, setFormError] = useState(false);
+
+  const onChange = ({ target }) => {
+    switch (target.name) {
+      case "email":
+        return setEmail(target.value);
+      case "password":
+        return setPassword(target.value);
+      default:
+        console.log("error");
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = { email, password };
+      const loginData = await __LoginUser(data);
+      props.toggleAuthenticated(true, loginData.user.id);
+      // props.history.push('/')
+    } catch (error) {
+      setFormError(true);
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -54,7 +69,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={onSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -65,6 +80,8 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={onChange}
           />
           <TextField
             variant="outlined"
@@ -76,7 +93,12 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={onChange}
           />
+          {formError ? (
+            <p>Please enter a registered Email and Password</p>
+          ) : null}
           <Button
             type="submit"
             fullWidth
@@ -96,9 +118,6 @@ export default function SignIn() {
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }

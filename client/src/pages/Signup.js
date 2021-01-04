@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -6,23 +6,11 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { __CreateUser, __LoginUser } from "../services/UserServices";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,8 +32,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Signup() {
+export default function Signup(props) {
   const classes = useStyles();
+
+  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [equal, setEqual] = useState(false);
+  const [formError, setFormError] = useState(false);
+  const [unique, setUnique] = useState(false);
+
+  const onChange = ({ target }) => {
+    switch (target.name) {
+      case "lastName":
+        return setLastName(target.value);
+      case "firstName":
+        return setFirstName(target.value);
+      case "userName":
+        return setUserName(target.value);
+      case "email":
+        return setEmail(target.value);
+      case "password":
+        return setPassword(target.value);
+      case "confirm":
+        return setConfirm(target.value);
+      default:
+        console.log("error");
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if ((lastName, firstName, userName, email, password)) {
+      if (password === confirm) {
+        try {
+          const data = {
+            lastName,
+            firstName,
+            userName,
+            email,
+            password,
+          };
+          await __CreateUser(data);
+          const loginData = await __LoginUser(data);
+          props.toggleAuthenticated(true, loginData.user.id);
+          // props.history.push('/')
+        } catch (error) {
+          setUnique(true);
+        }
+      } else setEqual(true);
+    } else setFormError(true);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -55,7 +95,7 @@ export default function Signup() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={onSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -67,6 +107,8 @@ export default function Signup() {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                value={firstName}
+                onChange={onChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -78,6 +120,8 @@ export default function Signup() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                value={lastName}
+                onChange={onChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -89,6 +133,8 @@ export default function Signup() {
                 label="User Name"
                 name="userName"
                 autoComplete="userName"
+                value={userName}
+                onChange={onChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -100,6 +146,8 @@ export default function Signup() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                value={email}
+                onChange={onChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -112,6 +160,8 @@ export default function Signup() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={onChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -119,14 +169,19 @@ export default function Signup() {
                 variant="outlined"
                 required
                 fullWidth
-                name="confirmPassword"
+                name="confirm"
                 label="Confirm Password"
                 type="password"
-                id="password"
+                id="confirmPassword"
                 autoComplete="current-password"
+                value={confirm}
+                onChange={onChange}
               />
             </Grid>
           </Grid>
+          {formError ? <p>Please fill in all fields</p> : null}
+          {equal ? <p>Passwords do not match</p> : null}
+          {unique ? <p>Email and or User Name already exists</p> : null}
           <Button
             type="submit"
             fullWidth
@@ -145,9 +200,6 @@ export default function Signup() {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
     </Container>
   );
 }

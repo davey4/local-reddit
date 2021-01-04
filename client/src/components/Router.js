@@ -59,7 +59,7 @@ const Router = (props) => {
             path="/signup"
             component={(props) => (
               <Layout currentUser={currentUser} {...props}>
-                <Signup {...props} />
+                <Signup toggleAuthenticated={toggleAuthenticated} {...props} />
               </Layout>
             )}
           />
