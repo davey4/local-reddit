@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Thread extends Model {
     /**
@@ -10,17 +8,55 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Thread.belongsTo(models.User, {
+        foreignKey: "user_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
+
+      Thread.belongsTo(models.Sub_Reddit, {
+        foreignKey: "sub_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
     }
-  };
-  Thread.init({
-    sub_id: DataTypes.INTEGER,
-    user_id: DataTypes.INTEGER,
-    content: DataTypes.STRING,
-    points: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'Thread',
-  });
+  }
+  Thread.init(
+    {
+      sub_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "sub_reddits",
+          key: "id",
+        },
+      },
+      user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "users",
+          key: "id",
+        },
+      },
+      content: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      points: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          min: 0,
+        },
+      },
+    },
+    {
+      sequelize,
+      modelName: "Thread",
+      tableName: "thread",
+    }
+  );
   return Thread;
 };

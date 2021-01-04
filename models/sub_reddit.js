@@ -23,7 +23,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   Sub_Reddit.init(
     {
-      user_id: DataTypes.INTEGER,
+      user_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "users",
+          key: "id",
+        },
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
