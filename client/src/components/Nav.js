@@ -11,15 +11,28 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HomeIcon from "@material-ui/icons/Home";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import ForumIcon from "@material-ui/icons/Forum";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   list: {
     width: 250,
   },
   fullList: {
     width: "auto",
   },
-});
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
 export default function Nav(props) {
   const classes = useStyles();
@@ -43,9 +56,13 @@ export default function Nav(props) {
     props.history.push("/");
   };
 
+  const pushToSub = () => {
+    props.history.push("/sub");
+  };
+
   const logout = () => {
-    props.history.push("/");
     localStorage.clear();
+    props.history.push("/");
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -75,6 +92,12 @@ export default function Nav(props) {
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
+        <ListItem button onClick={pushToSub}>
+          <ListItemIcon>
+            <ForumIcon />
+          </ListItemIcon>
+          <ListItemText primary="Forums" />
+        </ListItem>
       </List>
       <Divider />
       <List>
@@ -98,21 +121,32 @@ export default function Nav(props) {
   );
 
   return (
-    <div>
-      {["left"].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>
-            <MenuIcon />
-          </Button>
-          <Drawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
           >
-            {list(anchor)}
-          </Drawer>
-        </React.Fragment>
-      ))}
+            {["left"].map((anchor) => (
+              <React.Fragment key={anchor}>
+                <Button onClick={toggleDrawer(anchor, true)}>
+                  <MenuIcon />
+                </Button>
+                <Drawer
+                  anchor={anchor}
+                  open={state[anchor]}
+                  onClose={toggleDrawer(anchor, false)}
+                >
+                  {list(anchor)}
+                </Drawer>
+              </React.Fragment>
+            ))}
+          </IconButton>
+        </Toolbar>
+      </AppBar>
     </div>
   );
 }

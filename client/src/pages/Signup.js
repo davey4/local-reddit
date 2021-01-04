@@ -79,7 +79,7 @@ export default function Signup(props) {
           await __CreateUser(data);
           const loginData = await __LoginUser(data);
           props.toggleAuthenticated(true, loginData.user.id);
-          // props.history.push('/')
+          props.history.push("/sub");
         } catch (error) {
           setUnique(true);
         }

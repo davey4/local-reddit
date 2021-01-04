@@ -55,7 +55,7 @@ export default function SignIn(props) {
       const data = { email, password };
       const loginData = await __LoginUser(data);
       props.toggleAuthenticated(true, loginData.user.id);
-      // props.history.push('/')
+      props.history.push("/sub");
     } catch (error) {
       setFormError(true);
     }

@@ -1,7 +1,7 @@
 const Home = (props) => {
   return (
     <section>
-      <div>Home</div>
+      <h1>Local Forums</h1>
     </section>
   );
 };
