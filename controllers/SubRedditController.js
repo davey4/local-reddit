@@ -1,11 +1,12 @@
-const { Sub_Reddit } = require("../models");
+const { Sub_Reddit, User } = require("../models");
 
 const CreateSub = async (req, res) => {
   try {
     let user_id = parseInt(req.params.user_id);
+    let name = req.body.name;
     const sub = await Sub_Reddit.create({
       user_id: user_id,
-      name: req.body.name,
+      name: name,
     });
     res.send(sub);
   } catch (error) {
@@ -38,7 +39,9 @@ const DeleteSub = async (req, res) => {
 
 const GetAllSubs = async (req, res) => {
   try {
-    const subs = await Sub_Reddit.findAll();
+    const subs = await Sub_Reddit.findAll({
+      include: [{ model: User, attributes: ["user_name"] }],
+    });
     res.send(subs);
   } catch (error) {
     throw error;

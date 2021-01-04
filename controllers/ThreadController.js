@@ -85,7 +85,10 @@ const LikeThread = async (req, res) => {
 const UnlikeThread = async (req, res) => {
   try {
     let id = parseInt(req.params.thread_id);
-    const thread = await Thread.increment({ points: 1 }, { where: { id: id } });
+    const thread = await Thread.increment(
+      { points: -1 },
+      { where: { id: id } }
+    );
     res.send(thread);
   } catch (error) {
     throw error;

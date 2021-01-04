@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       User.hasMany(models.Sub_Reddit, {
-        foreignKey: "User_id",
+        foreignKey: "user_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });

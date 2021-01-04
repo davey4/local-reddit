@@ -10,6 +10,7 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "users",
           key: "id",
@@ -22,10 +23,12 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: new Date(),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: new Date(),
       },
     });
   },
