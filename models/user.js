@@ -25,12 +25,6 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
-
-      User.hasMany(models.Sub_Comment, {
-        foreignKey: "user_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      });
     }
   }
   User.init(

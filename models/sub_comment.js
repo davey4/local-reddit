@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Sub_Comment extends Model {
     /**
@@ -12,14 +10,31 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
-  Sub_Comment.init({
-    user_id: DataTypes.INTEGER,
-    sub_comment_id: DataTypes.INTEGER,
-    comment_id: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'Sub_Comment',
-  });
+  }
+  Sub_Comment.init(
+    {
+      sub_comment_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "comments",
+          key: "id",
+        },
+      },
+      comment_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "comments",
+          key: "id",
+        },
+      },
+    },
+    {
+      sequelize,
+      modelName: "Sub_Comment",
+      tableName: "sub_comments",
+    }
+  );
   return Sub_Comment;
 };

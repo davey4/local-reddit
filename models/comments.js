@@ -19,6 +19,18 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
+
+      Comments.belongsToMany(models.Comments, {
+        as: "subComments",
+        through: models.Sub_Comment,
+        foreignKey: "sub_comment_id",
+      });
+
+      Comments.belongsToMany(models.Comments, {
+        as: "parentComment",
+        through: models.Sub_Comment,
+        foreignKey: "comment_id",
+      });
     }
   }
   Comments.init(
