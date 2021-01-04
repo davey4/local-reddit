@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { __CheckSession } from "../services/UserServices";
 
-import ProtectedRoute from "./ProtectedRoute";
-
 import Layout from "../pages/Layout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";

@@ -46,7 +46,7 @@ export default function Nav(props) {
 
   useEffect(() => {
     setUser(props.currentUser);
-  }, []);
+  }, [props.currentUser]);
 
   const pushToLogin = () => {
     props.history.push("/login");
@@ -62,7 +62,7 @@ export default function Nav(props) {
 
   const logout = () => {
     localStorage.clear();
-    props.history.push("/");
+    setTimeout(() => props.history.push("/"), 10);
   };
 
   const toggleDrawer = (anchor, open) => (event) => {
