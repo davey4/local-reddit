@@ -4,6 +4,7 @@ import { __CheckSession } from "../services/UserServices";
 
 import ProtectedRoute from "./ProtectedRoute";
 
+import Layout from "../pages/Layout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
@@ -45,18 +46,46 @@ const Router = (props) => {
         <h1>Page Loading....</h1>
       ) : (
         <Switch>
-          <Route exact path="/" component={() => <Home />} />
-          <Route path="/signup" component={(props) => <Signup {...props} />} />
+          <Route
+            exact
+            path="/"
+            component={() => (
+              <Layout>
+                <Home />
+              </Layout>
+            )}
+          />
+          <Route
+            path="/signup"
+            component={(props) => (
+              <Layout>
+                <Signup {...props} />
+              </Layout>
+            )}
+          />
           <Route
             path="/login"
             component={(props) => (
-              <Login toggleAuthenticated={toggleAuthenticated} {...props} />
+              <Layout>
+                <Login toggleAuthenticated={toggleAuthenticated} {...props} />
+              </Layout>
             )}
           />
-          <Route path="/sub" component={(props) => <Sub {...props} />} />
+          <Route
+            path="/sub"
+            component={(props) => (
+              <Layout>
+                <Sub {...props} />
+              </Layout>
+            )}
+          />
           <Route
             path="/threads"
-            component={(props) => <Threads {...props} />}
+            component={(props) => (
+              <Layout>
+                <Threads {...props} />
+              </Layout>
+            )}
           />
         </Switch>
       )}
