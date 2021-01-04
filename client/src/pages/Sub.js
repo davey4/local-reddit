@@ -12,11 +12,6 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
   title: {
     fontSize: 14,
   },
@@ -42,13 +37,20 @@ const Sub = (props) => {
     }
   };
 
-  const onClick = (id) => {
-    console.log(id);
+  const onClick = (i) => {
+    let location = {
+      pathname: "/threads",
+      state: {
+        id: sub[i].id,
+        area: sub[i].name,
+      },
+    };
+    props.history.push(location);
   };
 
   return (
     <section>
-      {sub.map((el) => (
+      {sub.map((el, i) => (
         <Card className={classes.root} key={el.id}>
           <CardContent>
             <Typography
@@ -69,7 +71,7 @@ const Sub = (props) => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small" onClick={() => onClick(el.id)}>
+            <Button size="small" onClick={() => onClick(i)}>
               Find discussions
             </Button>
           </CardActions>
