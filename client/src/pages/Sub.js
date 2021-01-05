@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   small: {
-    width: theme.spacing(3),
-    height: theme.spacing(3),
+    width: theme.spacing(2.5),
+    height: theme.spacing(2.5),
   },
   title: {
     fontSize: 14,

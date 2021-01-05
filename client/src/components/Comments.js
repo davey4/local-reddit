@@ -10,6 +10,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import TextField from "@material-ui/core/TextField";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import Avatar from "@material-ui/core/Avatar";
 
 import {
   __DownVoteComment,
@@ -18,9 +19,16 @@ import {
   __UpdateComment,
 } from "../services/CommentServices";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
+  },
+  inline: {
+    display: "flex",
+  },
+  small: {
+    width: theme.spacing(2.5),
+    height: theme.spacing(2.5),
   },
   title: {
     fontSize: 14,
@@ -28,7 +36,7 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
-});
+}));
 
 const Comments = (props) => {
   const classes = useStyles();
@@ -95,7 +103,12 @@ const Comments = (props) => {
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Typography variant="body2" component="p">
+        <Typography className={classes.inline} variant="body1" component="p">
+          <Avatar
+            alt={props.Userid}
+            src={props.avatar}
+            className={classes.small}
+          />
           {props.userName}
         </Typography>
         {edit ? (

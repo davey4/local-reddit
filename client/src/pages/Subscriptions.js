@@ -5,12 +5,20 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
 
 import { __GetSubs, __UnSub } from "../services/SubscriptionServices";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
+  },
+  inline: {
+    display: "flex",
+  },
+  small: {
+    width: theme.spacing(2.5),
+    height: theme.spacing(2.5),
   },
   title: {
     fontSize: 14,
@@ -18,7 +26,7 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
-});
+}));
 
 const Subscriptions = (props) => {
   const classes = useStyles();
@@ -76,7 +84,16 @@ const Subscriptions = (props) => {
               <Typography className={classes.pos} color="textSecondary">
                 Created By:
               </Typography>
-              <Typography variant="body2" component="p">
+              <Typography
+                className={classes.inline}
+                variant="body1"
+                component="p"
+              >
+                <Avatar
+                  alt={el.Sub_Reddit.User.id}
+                  src={el.Sub_Reddit.User.avatar}
+                  className={classes.small}
+                />
                 {el.Sub_Reddit.User.user_name}
               </Typography>
             </CardContent>

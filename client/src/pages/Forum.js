@@ -115,6 +115,7 @@ const Forum = (props) => {
             currentUser={props.currentUser}
             userId={el.user_id}
             getThread={getThread}
+            avatar={el.User.avatar}
           />
         </div>
       ))}

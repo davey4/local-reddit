@@ -36,7 +36,7 @@ const GetSubs = async (req, res) => {
       include: [
         {
           model: Sub_Reddit,
-          include: [{ model: User, attributes: ["id", "user_name"] }],
+          include: [{ model: User, attributes: ["id", "user_name", "avatar"] }],
         },
       ],
     });
