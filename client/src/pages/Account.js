@@ -7,12 +7,19 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import TextField from "@material-ui/core/TextField";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 import {
   __GetUser,
   __GetAvatars,
   __UpdateUser,
+  __UpdatePassword,
 } from "../services/UserServices";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,6 +42,10 @@ const useStyles = makeStyles((theme) => ({
     border: 2,
     backgroundColor: "red",
   },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+  },
 }));
 
 const Account = (props) => {
@@ -44,22 +55,33 @@ const Account = (props) => {
   const [userName, setUserName] = useState("");
   const [avatar, setAvatar] = useState("");
   const [email, setEmail] = useState("");
-  // const [currPassword, setCurrPassword] = useState("");
-  // const [newPassword, setNewPassword] = useState("");
-  // const [confirm, setConfirm] = useState("");
-  const [update, setUpdate] = useState(false);
   const [avatars, setAvatars] = useState([]);
+
+  const [update, setUpdate] = useState(false);
 
   const [newLastName, setNewLastName] = useState("");
   const [newFirstName, setNewFirstName] = useState("");
   const [newUserName, setNewUserName] = useState("");
   const [newEmail, setNewEmail] = useState("");
-  const [newAvatar, setNewAvatar] = useState("");
+
+  const [passwordUpdate, setPasswordUpdate] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     getUser();
     getAvatars();
   }, []);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const getUser = async () => {
     try {
@@ -105,6 +127,26 @@ const Account = (props) => {
     }
   };
 
+  const updatePassword = async (e) => {
+    if (newPassword === confirm) {
+      try {
+        const body = {
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        };
+        await __UpdatePassword(props.currentUser, body);
+        setPasswordUpdate(false);
+        setOldPassword("");
+        setNewPassword("");
+        setConfirm("");
+      } catch (error) {
+        throw error;
+      }
+    } else {
+      setOpen(true);
+    }
+  };
+
   const onChange = ({ target }) => {
     switch (target.name) {
       case "lastName":
@@ -115,6 +157,12 @@ const Account = (props) => {
         return setNewUserName(target.value);
       case "email":
         return setNewEmail(target.value);
+      case "oldPassword":
+        return setOldPassword(target.value);
+      case "newPassword":
+        return setNewPassword(target.value);
+      case "confirm":
+        setConfirm(target.value);
       default:
         return;
     }
@@ -226,7 +274,11 @@ const Account = (props) => {
                   onClick={() => selectAvatar(el.avatar)}
                   className={avatar === el.avatar ? classes.selected : null}
                 >
-                  <Avatar alt={el.id} src={el.avatar} />
+                  <Avatar
+                    alt={el.id}
+                    src={el.avatar}
+                    className={classes.large}
+                  />
                 </Button>
               ))}
               <Button onClick={updateUser} size="small">
@@ -240,6 +292,75 @@ const Account = (props) => {
           )}
         </CardActions>
       </Card>
+      {passwordUpdate ? (
+        <Card className={(classes.root, classes.left)}>
+          <CardContent>
+            <Typography className={classes.pos}>
+              <TextField
+                autoComplete="password"
+                name="oldPassword"
+                variant="outlined"
+                required
+                id="oldPassword"
+                label="Old Password"
+                autoFocus
+                type="password"
+                value={oldPassword}
+                onChange={onChange}
+              />
+            </Typography>
+            <Typography className={classes.pos}>
+              <TextField
+                autoComplete="password"
+                name="newPassword"
+                variant="outlined"
+                required
+                id="newPassword"
+                label="New Password"
+                autoFocus
+                type="password"
+                value={newPassword}
+                onChange={onChange}
+              />
+            </Typography>
+            <Typography className={classes.pos}>
+              <TextField
+                autoComplete="password"
+                name="confirm"
+                variant="outlined"
+                required
+                id="confirm"
+                label="Confirm New Password"
+                autoFocus
+                type="password"
+                value={confirm}
+                onChange={onChange}
+              />
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small" onClick={updatePassword}>
+              Update Password
+            </Button>
+          </CardActions>
+        </Card>
+      ) : (
+        <Card className={classes.root}>
+          <CardActions>
+            <Button
+              onClick={() => setPasswordUpdate(!passwordUpdate)}
+              size="small"
+            >
+              Change Password
+            </Button>
+          </CardActions>
+        </Card>
+      )}
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          Passwords Don't Match
+        </Alert>
+      </Snackbar>
     </section>
   );
 };

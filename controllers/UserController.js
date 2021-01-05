@@ -75,33 +75,39 @@ const GetUser = async (req, res) => {
 const UpdateUser = async (req, res) => {
   try {
     let id = parseInt(req.params.user_id);
-    const { lastName, firstName, email, userName, avatar, password } = req.body;
-    if (password) {
-      const password_digest = await hashPassword(password);
+    const { lastName, firstName, email, userName, avatar } = req.body;
+    const updated = User.update(
+      {
+        last_name: lastName,
+        first_name: firstName,
+        email: email,
+        user_name: userName,
+        avatar: avatar,
+      },
+      { where: { id: id }, returning: true }
+    );
+    res.send(updated);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const UpdatePassword = async (req, res) => {
+  try {
+    let id = parseInt(req.params.user_id);
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findByPk(id);
+    if (await passwordValid(oldPassword, user.password_digest)) {
+      const password_digest = await hashPassword(newPassword);
       const updated = User.update(
         {
-          last_name: lastName,
-          first_name: firstName,
-          email: email,
-          user_name: userName,
-          avatar: avatar,
           password_digest: password_digest,
         },
         { where: { id: id }, returning: true }
       );
       res.send(updated);
     } else {
-      const updated = User.update(
-        {
-          last_name: lastName,
-          first_name: firstName,
-          email: email,
-          user_name: userName,
-          avatar: avatar,
-        },
-        { where: { id: id }, returning: true }
-      );
-      res.send(updated);
+      res.send({ msg: "error" });
     }
   } catch (error) {
     throw error;
@@ -123,5 +129,6 @@ module.exports = {
   RefreshSession,
   GetUser,
   UpdateUser,
+  UpdatePassword,
   GetAvatars,
 };

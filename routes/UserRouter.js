@@ -9,5 +9,6 @@ Router.get("/refresh/session", readToken, verifyJwt, controller.RefreshSession);
 Router.get("/:user_id", controller.GetUser);
 Router.get("/", controller.GetAvatars);
 Router.put("/:user_id", controller.UpdateUser);
+Router.put("/password/:user_id", controller.UpdatePassword);
 
 module.exports = Router;
