@@ -26,6 +26,12 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      avatar: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue:
+          "https://www.redditstatic.com/avatars/avatar_default_02_A5A4A4.png",
+      },
       password_digest: {
         type: Sequelize.STRING,
         allowNull: false,

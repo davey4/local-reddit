@@ -53,6 +53,7 @@ export default function SignIn(props) {
     e.preventDefault();
     try {
       const data = { email, password };
+      setFormError(true);
       const loginData = await __LoginUser(data);
       props.toggleAuthenticated(
         true,
@@ -60,7 +61,6 @@ export default function SignIn(props) {
         loginData.user.user_name
       );
       props.history.push("/sub");
-      setFormError(true);
     } catch (error) {
       throw error;
     }

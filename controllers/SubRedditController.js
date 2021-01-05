@@ -41,7 +41,7 @@ const GetAllSubs = async (req, res) => {
   try {
     const subs = await Sub_Reddit.findAll({
       include: [
-        { model: User, attributes: ["user_name"] },
+        { model: User, attributes: ["user_name", "avatar"] },
         {
           model: Subscription,
           include: [{ model: User, attributes: ["id", "user_name"] }],

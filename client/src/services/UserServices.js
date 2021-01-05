@@ -36,3 +36,12 @@ export const __GetUser = async (id) => {
     throw error;
   }
 };
+
+export const __GetAvatars = async () => {
+  try {
+    const res = await ApiClient.get("/user/");
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

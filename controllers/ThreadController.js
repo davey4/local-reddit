@@ -44,7 +44,7 @@ const GetAllThreads = async (req, res) => {
     const threads = await Thread.findAll({
       where: { sub_id: id },
       order: [["points", "DESC"]],
-      include: [{ model: User, attributes: ["id", "user_name"] }],
+      include: [{ model: User, attributes: ["id", "user_name", "avatar"] }],
     });
     res.send(threads);
   } catch (error) {
@@ -58,11 +58,11 @@ const GetThread = async (req, res) => {
     const thread = await Thread.findOne({
       where: { id: id },
       include: [
-        { model: User, attrbutes: ["id", "user_name"] },
+        { model: User, attrbutes: ["id", "user_name", "avatar"] },
         {
           order: [["createdAt", "DESC"]],
           model: Comments,
-          include: [{ model: User, attributes: ["id", "user_name"] }],
+          include: [{ model: User, attributes: ["id", "user_name", "avatar"] }],
         },
       ],
     });

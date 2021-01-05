@@ -7,13 +7,21 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import TextField from "@material-ui/core/TextField";
+import Avatar from "@material-ui/core/Avatar";
 
 import { __GetAllSubs, __CreateSub } from "../services/SubServices";
 import { __CreateSubscrip, __UnSub } from "../services/SubscriptionServices";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
+  },
+  inline: {
+    display: "flex",
+  },
+  small: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
   },
   title: {
     fontSize: 14,
@@ -21,7 +29,7 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
-});
+}));
 
 const Sub = (props) => {
   const classes = useStyles();
@@ -138,7 +146,16 @@ const Sub = (props) => {
             <Typography className={classes.pos} color="textSecondary">
               Created By:
             </Typography>
-            <Typography variant="body2" component="p">
+            <Typography
+              className={classes.inline}
+              variant="body1"
+              component="p"
+            >
+              <Avatar
+                alt={el.User.id}
+                src={el.User.avatar}
+                className={classes.small}
+              />
               {el.User.user_name}
             </Typography>
           </CardContent>

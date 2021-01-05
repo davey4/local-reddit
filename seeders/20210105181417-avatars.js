@@ -61,7 +61,6 @@ const avatars = [
   {
     avatar: "https://www.redditstatic.com/avatars/avatar_default_02_4856A3.png",
   },
-  { avatar: "redditstatic.com/avatars/avatar_default_02_7E53C1.png" },
   {
     avatar: "https://www.redditstatic.com/avatars/avatar_default_02_FF66AC.png",
   },

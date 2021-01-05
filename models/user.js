@@ -60,6 +60,10 @@ module.exports = (sequelize, DataTypes) => {
           isEmail: true,
         },
       },
+      avatar: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       password_digest: {
         type: DataTypes.STRING,
         allowNull: false,

@@ -7,5 +7,6 @@ Router.post("/login", controller.LoginUser);
 Router.get("/refresh/session", readToken, verifyJwt, controller.RefreshSession);
 
 Router.get("/:user_id", controller.GetUser);
+Router.get("/", controller.GetAvatars);
 
 module.exports = Router;

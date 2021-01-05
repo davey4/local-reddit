@@ -5,12 +5,19 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
 
-import { __GetUser } from "../services/UserServices";
+import { __GetUser, __GetAvatars } from "../services/UserServices";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
+  },
+  secondRoot: {
+    display: "flex",
+    "& > *": {
+      margin: theme.spacing(1),
+    },
   },
   bullet: {
     display: "inline-block",
@@ -23,7 +30,7 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
-});
+}));
 
 const Account = (props) => {
   const classes = useStyles();
@@ -35,9 +42,11 @@ const Account = (props) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [update, setUpdate] = useState(false);
+  const [avatars, setAvatars] = useState([]);
 
   useEffect(() => {
     getUser();
+    getAvatars();
   }, []);
 
   const getUser = async () => {
@@ -47,6 +56,16 @@ const Account = (props) => {
       setFirstName(data.first_name);
       setUserName(data.user_name);
       setEmail(data.email);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const getAvatars = async () => {
+    try {
+      const data = await __GetAvatars();
+      setAvatars(data);
+      console.log(data);
     } catch (error) {
       throw error;
     }
@@ -89,6 +108,11 @@ const Account = (props) => {
           <Button size="small">Update</Button>
         </CardActions>
       </Card>
+      <div className={classes.secondRoot}>
+        {avatars.map((el) => (
+          <Avatar alt={el.id} src={el.avatar} />
+        ))}
+      </div>
     </section>
   );
 };

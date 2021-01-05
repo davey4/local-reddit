@@ -1,11 +1,10 @@
-const { User, Notifications } = require("../models");
+const { User, Avatar } = require("../models");
 
 const {
   hashPassword,
   passwordValid,
   createToken,
 } = require("../middleware/index");
-const notifications = require("../models/notifications");
 
 const CreateUser = async (req, res) => {
   try {
@@ -16,6 +15,8 @@ const CreateUser = async (req, res) => {
       first_name: firstName,
       email: email,
       user_name: userName,
+      avatar:
+        "https://www.redditstatic.com/avatars/avatar_default_02_A5A4A4.png",
       password_digest: password_digest,
     });
     res.send(user);
@@ -37,6 +38,7 @@ const LoginUser = async (req, res) => {
       let payload = {
         id: user.id,
         userName: user.user_name,
+        avatar: user.avatar,
       };
       let token = createToken(payload);
       return res.send({ user, token });
@@ -50,7 +52,7 @@ const RefreshSession = async (req, res) => {
   try {
     const { token } = res.locals;
     const user = await User.findByPk(token.id, {
-      attributes: ["id", "user_name"],
+      attributes: ["id", "user_name", "avatar"],
     });
     res.send({ user, status: "OK" });
   } catch (error) {
@@ -62,9 +64,18 @@ const GetUser = async (req, res) => {
   try {
     let id = parseInt(req.params.user_id);
     const user = await User.findByPk(id, {
-      attributes: ["first_name", "last_name", "user_name", "email"],
+      attributes: ["first_name", "last_name", "user_name", "email", "avatar"],
     });
     res.send(user);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const GetAvatars = async (req, res) => {
+  try {
+    const avatars = await Avatar.findAll();
+    res.send(avatars);
   } catch (error) {
     throw error;
   }
@@ -75,4 +86,5 @@ module.exports = {
   LoginUser,
   RefreshSession,
   GetUser,
+  GetAvatars,
 };
