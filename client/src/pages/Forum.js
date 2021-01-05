@@ -37,6 +37,7 @@ const Forum = (props) => {
   const [addComment, setAddComment] = useState(false);
   const [content, setContent] = useState("");
   const [open, setOpen] = useState(false);
+  const [id, setId] = useState();
 
   useEffect(() => {
     getThread();
@@ -53,8 +54,10 @@ const Forum = (props) => {
   const getThread = async () => {
     try {
       const data = await __GetThread(props.location.state);
+      console.log(data);
       setTitle(data.content);
       setComments(data.Comments);
+      setId(data.user_id);
     } catch (error) {
       throw error;
     }
@@ -96,7 +99,7 @@ const Forum = (props) => {
       const data = {
         message: message,
       };
-      await __CreateNotification(props.currentUser, props.location.state, data);
+      await __CreateNotification(id, props.location.state, data);
     } catch (error) {
       throw error;
     }
