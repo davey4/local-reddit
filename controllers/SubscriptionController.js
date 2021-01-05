@@ -1,4 +1,4 @@
-const { Subscription, Sub_Reddit } = require("../models");
+const { Subscription, Sub_Reddit, User } = require("../models");
 
 const CreateSub = async (req, res) => {
   try {
@@ -33,8 +33,14 @@ const GetSubs = async (req, res) => {
     let id = parseInt(req.params.user_id);
     const subs = await Subscription.findAll({
       where: { user_id: id },
-      include: [{ model: Sub_Reddit }],
+      include: [
+        {
+          model: Sub_Reddit,
+          include: [{ model: User, attributes: ["id", "user_name"] }],
+        },
+      ],
     });
+    res.send(subs);
   } catch (error) {
     throw error;
   }
