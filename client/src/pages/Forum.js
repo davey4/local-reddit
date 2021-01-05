@@ -140,7 +140,9 @@ const Forum = (props) => {
         )}
       </Card>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert severity="error">Please Login First!</Alert>
+        <Alert onClose={handleClose} severity="error">
+          Please Login First!
+        </Alert>
       </Snackbar>
     </section>
   );
