@@ -1,6 +1,6 @@
 import ApiClient from "./ApiClient";
 
-export const __CreateSub = async (userId, subId) => {
+export const __CreateSubscrip = async (userId, subId) => {
   try {
     const res = await ApiClient.post(`/subscription/${userId}/${subId}`);
     return res.data;

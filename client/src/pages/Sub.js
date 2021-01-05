@@ -9,6 +9,7 @@ import AddBoxIcon from "@material-ui/icons/AddBox";
 import TextField from "@material-ui/core/TextField";
 
 import { __GetAllSubs, __CreateSub } from "../services/SubServices";
+import { __CreateSubscrip, __UnSub } from "../services/SubscriptionServices";
 
 const useStyles = makeStyles({
   root: {
@@ -51,6 +52,7 @@ const Sub = (props) => {
         await __CreateSub(props.currentUser, data);
         getSubs();
         setName("");
+        setAdd(false);
       } catch (error) {
         throw error;
       }
@@ -70,6 +72,25 @@ const Sub = (props) => {
 
   const onChange = ({ target }) => {
     setName(target.value);
+  };
+
+  const subscribe = async (id) => {
+    try {
+      await __CreateSubscrip(props.currentUser, id);
+      console.log(id);
+      getSubs();
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const unSubscribe = async (id) => {
+    try {
+      await __UnSub(props.currentUser, id);
+      getSubs();
+    } catch (error) {
+      throw error;
+    }
   };
 
   return (
@@ -121,6 +142,17 @@ const Sub = (props) => {
               {el.User.user_name}
             </Typography>
           </CardContent>
+          {props.currentUser ? (
+            el.Subscriptions.find((el) => el.user_id === props.currentUser) ? (
+              <CardActions>
+                <Button onClick={() => unSubscribe(el.id)}>UnSubscribe</Button>
+              </CardActions>
+            ) : (
+              <CardActions>
+                <Button onClick={() => subscribe(el.id)}>Subscribe</Button>
+              </CardActions>
+            )
+          ) : null}
           <CardActions>
             <Button size="small" onClick={() => onClick(i)}>
               Find discussions

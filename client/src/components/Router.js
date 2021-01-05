@@ -11,6 +11,7 @@ import Threads from "../pages/Threads";
 import Forum from "../pages/Forum";
 import Notifications from "../pages/Notifications";
 import Account from "../pages/Account";
+import Subscriptions from "../pages/Subscriptions";
 
 const Router = (props) => {
   const [loading, updateLoading] = useState(true);
@@ -156,6 +157,18 @@ const Router = (props) => {
                 {...props}
               >
                 <Account currentUser={currentUser} {...props} />
+              </Layout>
+            )}
+          />
+          <Route
+            path="/subscriptions"
+            component={(props) => (
+              <Layout
+                currentUser={currentUser}
+                verify={verifyTokenValid}
+                {...props}
+              >
+                <Subscriptions currentUser={currentUser} {...props} />
               </Layout>
             )}
           />

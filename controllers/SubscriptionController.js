@@ -4,6 +4,7 @@ const CreateSub = async (req, res) => {
   try {
     let userId = parseInt(req.params.user_id);
     let subId = parseInt(req.params.sub_id);
+    console.log(subId);
     const sub = await Subscription.create({
       user_id: userId,
       sub_id: subId,

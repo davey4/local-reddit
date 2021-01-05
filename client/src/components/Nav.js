@@ -17,6 +17,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ForumIcon from "@material-ui/icons/Forum";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import SettingsIcon from "@material-ui/icons/Settings";
+import SubscriptionsIcon from "@material-ui/icons/Subscriptions";
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -60,6 +61,10 @@ export default function Nav(props) {
 
   const pushToSub = () => {
     props.history.push("/sub");
+  };
+
+  const pushToSubcriptions = () => {
+    props.history.push("/subscriptions");
   };
 
   const pushToNotif = () => {
@@ -114,6 +119,12 @@ export default function Nav(props) {
       <List>
         {user ? (
           <div>
+            <ListItem button onClick={pushToSubcriptions}>
+              <ListItemIcon>
+                <SubscriptionsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Subscriptions" />
+            </ListItem>
             <ListItem button onClick={pushToNotif}>
               <ListItemIcon>
                 <NotificationsIcon />
