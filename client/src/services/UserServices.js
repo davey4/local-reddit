@@ -27,3 +27,12 @@ export const __CheckSession = async () => {
     throw error;
   }
 };
+
+export const __GetUser = async (id) => {
+  try {
+    const res = await ApiClient.get(`/user/${id}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
