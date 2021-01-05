@@ -9,6 +9,8 @@ import Signup from "../pages/Signup";
 import Sub from "../pages/Sub";
 import Threads from "../pages/Threads";
 import Forum from "../pages/Forum";
+import Notifications from "../pages/Notifications";
+import Account from "../pages/Account";
 
 const Router = (props) => {
   const [loading, updateLoading] = useState(true);
@@ -119,6 +121,30 @@ const Router = (props) => {
                 {...props}
               >
                 <Forum currentUser={currentUser} {...props} />
+              </Layout>
+            )}
+          />
+          <Route
+            path="/notifications"
+            component={(props) => (
+              <Layout
+                currentUser={currentUser}
+                verify={verifyTokenValid}
+                {...props}
+              >
+                <Notifications currentUser={currentUser} {...props} />
+              </Layout>
+            )}
+          />
+          <Route
+            path="/account"
+            component={(props) => (
+              <Layout
+                currentUser={currentUser}
+                verify={verifyTokenValid}
+                {...props}
+              >
+                <Account currentUser={currentUser} {...props} />
               </Layout>
             )}
           />

@@ -15,6 +15,8 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import ForumIcon from "@material-ui/icons/Forum";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -60,6 +62,14 @@ export default function Nav(props) {
     props.history.push("/sub");
   };
 
+  const pushToNotif = () => {
+    props.history.push("/notifications");
+  };
+
+  const pushToAcount = () => {
+    props.history.push("/account");
+  };
+
   const logout = () => {
     localStorage.clear();
     props.verify();
@@ -103,18 +113,32 @@ export default function Nav(props) {
       <Divider />
       <List>
         {user ? (
-          <ListItem button onClick={logout}>
-            <ListItemIcon>
-              <AccountCircleIcon />
-            </ListItemIcon>
-            <ListItemText primary="logout" />
-          </ListItem>
+          <div>
+            <ListItem button onClick={pushToNotif}>
+              <ListItemIcon>
+                <NotificationsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Notifications" />
+            </ListItem>
+            <ListItem button onClick={pushToAcount}>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Account" />
+            </ListItem>
+            <ListItem button onClick={logout}>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItem>
+          </div>
         ) : (
           <ListItem button onClick={pushToLogin}>
             <ListItemIcon>
               <AccountCircleIcon />
             </ListItemIcon>
-            <ListItemText primary="login" />
+            <ListItemText primary="Login" />
           </ListItem>
         )}
       </List>
