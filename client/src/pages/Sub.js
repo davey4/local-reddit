@@ -85,7 +85,6 @@ const Sub = (props) => {
   const subscribe = async (id) => {
     try {
       await __CreateSubscrip(props.currentUser, id);
-      console.log(id);
       getSubs();
     } catch (error) {
       throw error;

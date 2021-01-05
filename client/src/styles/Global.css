@@ -1,3 +1,11 @@
 body {
   font-family: "Roboto", sans-serif;
 }
+.home {
+  display: flex;
+  justify-content: center;
+}
+.logo {
+  margin-top: 1em;
+  height: 30em;
+}
