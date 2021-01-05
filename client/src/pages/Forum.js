@@ -4,11 +4,17 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 import Comments from "../components/Comments";
 
 import { __GetThread } from "../services/ThreadServices";
 import { __CreateComment } from "../services/CommentServices";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles({
   root: {
@@ -29,10 +35,19 @@ const Forum = (props) => {
   const [comments, setComments] = useState([]);
   const [addComment, setAddComment] = useState(false);
   const [content, setContent] = useState("");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     getThread();
   }, []);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const getThread = async () => {
     try {
@@ -68,7 +83,8 @@ const Forum = (props) => {
         setAddComment(false);
       }
     } else {
-      alert("please login");
+      setOpen(true);
+      setAddComment(false);
     }
   };
 
@@ -123,6 +139,9 @@ const Forum = (props) => {
           </CardActions>
         )}
       </Card>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert severity="error">Please Login First!</Alert>
+      </Snackbar>
     </section>
   );
 };
