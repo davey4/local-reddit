@@ -11,6 +11,7 @@ import Comments from "../components/Comments";
 
 import { __GetThread } from "../services/ThreadServices";
 import { __CreateComment } from "../services/CommentServices";
+import { __CreateNotification } from "../services/NotificationServices";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;

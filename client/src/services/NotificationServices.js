@@ -17,3 +17,12 @@ export const __DeleteNotification = async (id) => {
     throw error;
   }
 };
+
+export const __GetNotifications = async (id) => {
+  try {
+    const res = await ApiClient.get(`/notif/${id}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

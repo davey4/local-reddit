@@ -25,7 +25,20 @@ const DeleteNotification = async (req, res) => {
   }
 };
 
+const GetNotification = async (req, res) => {
+  try {
+    let id = parseInt(req.params.user_id);
+    const notifs = await Notifications.findAll({
+      where: { user_id: id },
+    });
+    res.send(notifs);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   CreateNotification,
   DeleteNotification,
+  GetNotification,
 };

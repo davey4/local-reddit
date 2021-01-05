@@ -62,7 +62,6 @@ const GetUser = async (req, res) => {
     let id = parseInt(req.params.user_id);
     const user = await User.findByPk(id, {
       attributes: ["first_name", "last_name", "user_name", "email"],
-      include: [{ model: Notifications }],
     });
     res.send(user);
   } catch (error) {

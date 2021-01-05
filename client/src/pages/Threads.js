@@ -7,11 +7,14 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import TextField from "@material-ui/core/TextField";
 
 import {
   __GetAllThreads,
   __UpVoteThread,
   __DownVoteThread,
+  __CreateThread,
 } from "../services/ThreadServices";
 
 const useStyles = makeStyles({
@@ -29,10 +32,28 @@ const useStyles = makeStyles({
 const Threads = (props) => {
   const classes = useStyles();
   const [threads, setThreads] = useState([]);
+  const [content, setContent] = useState("");
+  const [add, setAdd] = useState(false);
 
   useEffect(() => {
     getThreads();
   }, []);
+
+  const createThread = async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        subId: props.location.state.id,
+        content: content,
+      };
+      await __CreateThread(props.currentUser, data);
+      getThreads();
+      setContent("");
+      setAdd(false);
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const getThreads = async () => {
     try {
@@ -62,7 +83,6 @@ const Threads = (props) => {
   };
 
   const onClick = (id) => {
-    // console.log(id);
     let location = {
       pathname: "/forum",
       state: id,
@@ -70,9 +90,40 @@ const Threads = (props) => {
     props.history.push(location);
   };
 
+  const onChange = ({ target }) => {
+    setContent(target.value);
+  };
+
   return (
     <section>
       <h1>{props.location.state.area}</h1>
+      {props.currentUser ? (
+        <Card variant="outlined">
+          <CardActions>
+            <Button size="large" onClick={() => setAdd(!add)}>
+              <AddBoxIcon /> Add Thread
+            </Button>
+          </CardActions>
+          {add ? (
+            <form onSubmit={createThread}>
+              <TextField
+                id="outlined-full-width"
+                style={{ margin: 10 }}
+                placeholder="Area"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                value={content}
+                onChange={onChange}
+              />
+              <Button type="submit">Add</Button>
+            </form>
+          ) : null}
+        </Card>
+      ) : null}
       {threads.map((el) => (
         <Card className={classes.root} key={el.id}>
           <CardContent>
