@@ -1,10 +1,11 @@
-const { User } = require("../models");
+const { User, Notifications } = require("../models");
 
 const {
   hashPassword,
   passwordValid,
   createToken,
 } = require("../middleware/index");
+const notifications = require("../models/notifications");
 
 const CreateUser = async (req, res) => {
   try {
@@ -56,8 +57,22 @@ const RefreshSession = async (req, res) => {
   }
 };
 
+const GetUser = async (req, res) => {
+  try {
+    let id = parseInt(req.params.user_id);
+    const user = await User.findByPk(id, {
+      attributes: ["first_name", "last_name", "user_name", "email"],
+      include: [{ model: Notifications }],
+    });
+    res.send(user);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   CreateUser,
   LoginUser,
   RefreshSession,
+  GetUser,
 };

@@ -6,4 +6,6 @@ Router.post("/register", controller.CreateUser);
 Router.post("/login", controller.LoginUser);
 Router.get("/refresh/session", readToken, verifyJwt, controller.RefreshSession);
 
+Router.get("/:user_id", controller.GetUser);
+
 module.exports = Router;
