@@ -6,7 +6,7 @@ const CreateNotification = async (req, res) => {
     let threadId = parseInt(reg.params.thread_id);
     const notif = await Notifications.create({
       user_id: userId,
-      messaage: req.body.messaage,
+      message: req.body.message,
       thread_id: threadId,
     });
     res.send(notif);
