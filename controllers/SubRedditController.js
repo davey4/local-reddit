@@ -1,4 +1,4 @@
-const { Sub_Reddit, User } = require("../models");
+const { Sub_Reddit, User, Subscription } = require("../models");
 
 const CreateSub = async (req, res) => {
   try {
@@ -40,7 +40,13 @@ const DeleteSub = async (req, res) => {
 const GetAllSubs = async (req, res) => {
   try {
     const subs = await Sub_Reddit.findAll({
-      include: [{ model: User, attributes: ["user_name"] }],
+      include: [
+        { model: User, attributes: ["user_name"] },
+        {
+          model: Subscription,
+          include: [{ model: User, attributes: ["id", "user_name"] }],
+        },
+      ],
     });
     res.send(subs);
   } catch (error) {
