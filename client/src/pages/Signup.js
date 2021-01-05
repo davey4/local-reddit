@@ -79,7 +79,6 @@ export default function Signup(props) {
           await __CreateUser(data);
           const loginData = await __LoginUser(data);
           props.toggleAuthenticated(
-            true,
             loginData.user.id,
             loginData.user.user_name
           );

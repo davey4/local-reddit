@@ -17,7 +17,6 @@ const Router = (props) => {
   const [loading, updateLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState();
   const [currentUserName, setCurrentUserName] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     updateLoading(false);
@@ -29,26 +28,20 @@ const Router = (props) => {
     if (token) {
       try {
         const session = await __CheckSession();
-        console.log(session);
         setCurrentUser(session.user.id);
         setCurrentUserName(session.user.user_name);
-        setAuthenticated(true);
         props.history.push("/");
       } catch (error) {
         localStorage.clear();
         setCurrentUser();
         setCurrentUserName("");
-        setAuthenticated(false);
       }
     } else {
       setCurrentUser();
-      setCurrentUserName("");
-      setAuthenticated(false);
     }
   };
 
-  const toggleAuthenticated = (value, user, userName) => {
-    setAuthenticated(value);
+  const toggleAuthenticated = (user, userName) => {
     setCurrentUser(user);
     setCurrentUserName(userName);
   };

@@ -19,6 +19,8 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import SettingsIcon from "@material-ui/icons/Settings";
 import SubscriptionsIcon from "@material-ui/icons/Subscriptions";
 
+import { __GetNotifications } from "../services/NotificationServices";
+
 const useStyles = makeStyles((theme) => ({
   list: {
     width: 250,
@@ -40,16 +42,24 @@ const useStyles = makeStyles((theme) => ({
 export default function Nav(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    top: false,
     left: false,
-    bottom: false,
-    right: false,
   });
   const [user, setUser] = useState();
+  const [notif, setNotif] = useState();
 
   useEffect(() => {
     setUser(props.currentUser);
+    getNotif();
   }, []);
+
+  const getNotif = async () => {
+    try {
+      const data = await __GetNotifications(props.currentUser);
+      setNotif(data.length);
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const pushToLogin = () => {
     props.history.push("/login");
@@ -128,6 +138,7 @@ export default function Nav(props) {
             <ListItem button onClick={pushToNotif}>
               <ListItemIcon>
                 <NotificationsIcon />
+                {notif}
               </ListItemIcon>
               <ListItemText primary="Notifications" />
             </ListItem>

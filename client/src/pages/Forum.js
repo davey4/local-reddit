@@ -54,7 +54,6 @@ const Forum = (props) => {
   const getThread = async () => {
     try {
       const data = await __GetThread(props.location.state);
-      console.log(data);
       setTitle(data.content);
       setComments(data.Comments);
       setId(data.user_id);
