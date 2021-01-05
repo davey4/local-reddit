@@ -1,33 +1,27 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Sub_Reddit extends Model {
+  class Subscription extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Sub_Reddit.belongsTo(models.User, {
+      Subscription.belongsTo(models.User, {
         foreignKey: "user_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
 
-      Sub_Reddit.hasMany(models.Thread, {
-        foreignKey: "sub_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      });
-
-      Sub_Reddit.hasMany(models.Subscription, {
+      Subscription.belongsTo(models.Sub_Reddit, {
         foreignKey: "sub_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
     }
   }
-  Sub_Reddit.init(
+  Subscription.init(
     {
       user_id: {
         type: DataTypes.INTEGER,
@@ -37,16 +31,20 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
       },
-      name: {
-        type: DataTypes.STRING,
+      sub_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "sub_reddits",
+          key: "id",
+        },
       },
     },
     {
       sequelize,
-      modelName: "Sub_Reddit",
-      tableName: "sub_reddits",
+      modelName: "Subscription",
+      tableName: "subscriptions",
     }
   );
-  return Sub_Reddit;
+  return Subscription;
 };

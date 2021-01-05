@@ -64,7 +64,7 @@ const Notifications = (props) => {
 
   return (
     <section>
-      {notif ? (
+      {notif.length > 0 ? (
         notif.map((el) => (
           <div key={el.id}>
             <Card className={classes.root} variant="outlined">
