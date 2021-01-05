@@ -18,10 +18,14 @@ const CreateComment = async (req, res) => {
 const UpdateComment = async (req, res) => {
   try {
     let id = parseInt(req.params.comment_id);
-    const updatedComment = await Comments.update(req.body.content, {
-      where: { id: id },
-      returning: true,
-    });
+    const updatedComment = await Comments.update(
+      { content: req.body.content },
+
+      {
+        where: { id: id },
+        returning: true,
+      }
+    );
     res.send(updatedComment);
   } catch (error) {
     throw error;
