@@ -72,6 +72,42 @@ const GetUser = async (req, res) => {
   }
 };
 
+const UpdateUser = async (req, res) => {
+  try {
+    let id = parseInt(req.params.user_id);
+    const { lastName, firstName, email, userName, avatar, password } = req.body;
+    if (password) {
+      const password_digest = await hashPassword(password);
+      const updated = User.update(
+        {
+          last_name: lastName,
+          first_name: firstName,
+          email: email,
+          user_name: userName,
+          avatar: avatar,
+          password_digest: password_digest,
+        },
+        { where: { id: id }, returning: true }
+      );
+      res.send(updated);
+    } else {
+      const updated = User.update(
+        {
+          last_name: lastName,
+          first_name: firstName,
+          email: email,
+          user_name: userName,
+          avatar: avatar,
+        },
+        { where: { id: id }, returning: true }
+      );
+      res.send(updated);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 const GetAvatars = async (req, res) => {
   try {
     const avatars = await Avatar.findAll();
@@ -86,5 +122,6 @@ module.exports = {
   LoginUser,
   RefreshSession,
   GetUser,
+  UpdateUser,
   GetAvatars,
 };
