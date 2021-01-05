@@ -36,6 +36,7 @@ const LoginUser = async (req, res) => {
     ) {
       let payload = {
         id: user.id,
+        userName: user.user_name,
       };
       let token = createToken(payload);
       return res.send({ user, token });
@@ -49,7 +50,7 @@ const RefreshSession = async (req, res) => {
   try {
     const { token } = res.locals;
     const user = await User.findByPk(token.id, {
-      attributes: ["id"],
+      attributes: ["id", "user_name"],
     });
     res.send({ user, status: "OK" });
   } catch (error) {

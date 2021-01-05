@@ -15,6 +15,7 @@ import Account from "../pages/Account";
 const Router = (props) => {
   const [loading, updateLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState();
+  const [currentUserName, setCurrentUserName] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -29,20 +30,26 @@ const Router = (props) => {
         const session = await __CheckSession();
         console.log(session);
         setCurrentUser(session.user.id);
+        setCurrentUserName(session.user.user_name);
         setAuthenticated(true);
         props.history.push("/");
       } catch (error) {
         localStorage.clear();
+        setCurrentUser();
+        setCurrentUserName("");
+        setAuthenticated(false);
       }
     } else {
       setCurrentUser();
+      setCurrentUserName("");
       setAuthenticated(false);
     }
   };
 
-  const toggleAuthenticated = (value, user) => {
+  const toggleAuthenticated = (value, user, userName) => {
     setAuthenticated(value);
     setCurrentUser(user);
+    setCurrentUserName(userName);
   };
 
   return (
@@ -120,7 +127,11 @@ const Router = (props) => {
                 verify={verifyTokenValid}
                 {...props}
               >
-                <Forum currentUser={currentUser} {...props} />
+                <Forum
+                  currentUserName={currentUserName}
+                  currentUser={currentUser}
+                  {...props}
+                />
               </Layout>
             )}
           />

@@ -74,6 +74,7 @@ const Forum = (props) => {
             content: content,
           };
           await __CreateComment(props.currentUser, data);
+          createNotif();
           getThread();
           setContent("");
           setAddComment(false);
@@ -86,6 +87,18 @@ const Forum = (props) => {
     } else {
       setOpen(true);
       setAddComment(false);
+    }
+  };
+
+  const createNotif = async () => {
+    try {
+      let message = `${props.currentUserName} replied to your post`;
+      const data = {
+        message: message,
+      };
+      await __CreateNotification(props.currentUser, props.location.state, data);
+    } catch (error) {
+      throw error;
     }
   };
 
