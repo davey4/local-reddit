@@ -94,7 +94,7 @@ const Router = (props) => {
                 verify={verifyTokenValid}
                 {...props}
               >
-                <Sub {...props} />
+                <Sub currentUser={currentUser} {...props} />
               </Layout>
             )}
           />

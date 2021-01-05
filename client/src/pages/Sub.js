@@ -5,8 +5,10 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import TextField from "@material-ui/core/TextField";
 
-import { __GetAllSubs } from "../services/SubServices";
+import { __GetAllSubs, __CreateSub } from "../services/SubServices";
 
 const useStyles = makeStyles({
   root: {
@@ -23,6 +25,8 @@ const useStyles = makeStyles({
 const Sub = (props) => {
   const classes = useStyles();
   const [sub, setSub] = useState([]);
+  const [add, setAdd] = useState(false);
+  const [name, setName] = useState("");
 
   useEffect(() => {
     getSubs();
@@ -37,6 +41,22 @@ const Sub = (props) => {
     }
   };
 
+  const addSub = async (e) => {
+    e.preventDefault();
+    if (name) {
+      try {
+        const data = {
+          name: name,
+        };
+        await __CreateSub(props.currentUser, data);
+        getSubs();
+        setName("");
+      } catch (error) {
+        throw error;
+      }
+    }
+  };
+
   const onClick = (i) => {
     let location = {
       pathname: "/threads",
@@ -48,8 +68,39 @@ const Sub = (props) => {
     props.history.push(location);
   };
 
+  const onChange = ({ target }) => {
+    setName(target.value);
+  };
+
   return (
     <section>
+      {props.currentUser ? (
+        <Card variant="outlined">
+          <CardActions>
+            <Button size="large" onClick={() => setAdd(!add)}>
+              <AddBoxIcon /> Add Area
+            </Button>
+          </CardActions>
+          {add ? (
+            <form onSubmit={addSub}>
+              <TextField
+                id="outlined-full-width"
+                style={{ margin: 10 }}
+                placeholder="Area"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                value={name}
+                onChange={onChange}
+              />
+              <Button type="submit">Add</Button>
+            </form>
+          ) : null}
+        </Card>
+      ) : null}
       {sub.map((el, i) => (
         <Card className={classes.root} key={el.id}>
           <CardContent>
