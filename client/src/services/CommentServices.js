@@ -44,3 +44,15 @@ export const __DownVoteComment = async (id) => {
     throw error;
   }
 };
+
+export const __CommentOnComment = async (userId, parentId, data) => {
+  try {
+    const res = await ApiClient.post(
+      `/comment/sub/${userId}/${parentId}`,
+      data
+    );
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

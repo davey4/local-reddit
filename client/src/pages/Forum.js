@@ -110,7 +110,7 @@ const Forum = (props) => {
   const recursiveComments = (el) => {
     if (el.subComments) {
       return el.subComments.map((sub, i) => (
-        <div className={classes.indent}>
+        <div key={sub.id} className={classes.indent}>
           <Comments
             id={sub.id}
             userName={sub.User.user_name}

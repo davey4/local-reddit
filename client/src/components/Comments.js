@@ -17,6 +17,7 @@ import {
   __UpVoteComment,
   __DeleteComment,
   __UpdateComment,
+  __CommentOnComment,
 } from "../services/CommentServices";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +43,7 @@ const Comments = (props) => {
   const classes = useStyles();
   const [content, setContent] = useState("");
   const [edit, setEdit] = useState(false);
+  const [addComment, setAddComment] = useState(false);
 
   const upVote = async (id) => {
     try {
@@ -96,8 +98,19 @@ const Comments = (props) => {
     }
   };
 
-  const onClick = (id) => {
-    console.log(id);
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = {
+        content: content,
+      };
+      await __CommentOnComment(props.currentUser, props.id, data);
+      props.getThread();
+      setContent("");
+      setAddComment(false);
+    } catch (error) {
+      throw error;
+    }
   };
 
   return (
@@ -159,10 +172,38 @@ const Comments = (props) => {
               <DeleteIcon />
             </Button>
           </div>
+        ) : addComment ? (
+          <form
+            className={classes.root}
+            noValidate
+            autoComplete="off"
+            onSubmit={onSubmit}
+          >
+            <TextField
+              id="outlined-full-width"
+              style={{ margin: 10 }}
+              placeholder="Reply"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="outlined"
+              value={content}
+              onChange={onChange}
+            />
+            <CardActions>
+              <Button size="small" type="submit">
+                Reply
+              </Button>
+            </CardActions>
+          </form>
         ) : (
-          <Button size="small" onClick={() => onClick(props.id)}>
-            Reply
-          </Button>
+          <CardActions>
+            <Button size="small" onClick={() => setAddComment(!addComment)}>
+              Reply
+            </Button>
+          </CardActions>
         )}
       </CardActions>
     </Card>

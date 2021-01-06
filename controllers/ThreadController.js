@@ -52,25 +52,6 @@ const GetAllThreads = async (req, res) => {
   }
 };
 
-const recursiveJoin = async (req, res) => {
-  try {
-    // let state = true;
-    const comment = await Sub_Comment.findAll({
-      // as: "subComments",
-      where: { sub_comment_id: req.body },
-    });
-    if (comment) {
-      // recursiveJoin(comment.id);
-      res.send(comment);
-    } else {
-      // recursiveJoin(comment.id);
-      res.send({ msg: "nope" });
-    }
-  } catch (error) {
-    throw error;
-  }
-};
-
 const GetThread = async (req, res) => {
   try {
     let id = parseInt(req.params.thread_id);
