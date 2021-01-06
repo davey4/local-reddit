@@ -1,4 +1,4 @@
-const { Comments } = require("../models");
+const { Comments, Sub_Comment } = require("../models");
 
 const CreateComment = async (req, res) => {
   try {
@@ -10,6 +10,27 @@ const CreateComment = async (req, res) => {
       content: content,
     });
     res.send(comment);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const CommentOnComment = async (req, res) => {
+  try {
+    let userId = parseInt(req.params.user_id);
+    const { content } = req.body;
+    const comment = await Comments.create({
+      user_id: userId,
+      content: content,
+    });
+
+    let parentId = parseInt(req.params.parent_id);
+    const subComment = await Sub_Comment.create({
+      sub_comment_id: comment.id,
+      comment_id: parentId,
+    });
+
+    res.send({ comment, subComment });
   } catch (error) {
     throw error;
   }
@@ -70,6 +91,7 @@ const UnlikeComment = async (req, res) => {
 
 module.exports = {
   CreateComment,
+  CommentOnComment,
   UpdateComment,
   DeleteComment,
   LikeComment,

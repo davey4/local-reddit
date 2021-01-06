@@ -27,6 +27,9 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  indent: {
+    marginLeft: 40,
+  },
 });
 
 const Forum = (props) => {
@@ -104,6 +107,28 @@ const Forum = (props) => {
     }
   };
 
+  const recursiveComments = (el) => {
+    if (el.subComments) {
+      return el.subComments.map((sub, i) => (
+        <div className={classes.indent}>
+          <Comments
+            id={sub.id}
+            userName={sub.User.user_name}
+            content={sub.content}
+            points={sub.points}
+            currentUser={props.currentUser}
+            userId={sub.user_id}
+            getThread={getThread}
+            avatar={sub.User.avatar}
+          />
+          {el.subComments.length > 0
+            ? recursiveComments(el.subComments[i])
+            : null}
+        </div>
+      ));
+    }
+  };
+
   return (
     <section>
       <h1>{title}</h1>
@@ -119,6 +144,7 @@ const Forum = (props) => {
             getThread={getThread}
             avatar={el.User.avatar}
           />
+          {el.subComments.length > 0 ? recursiveComments(el) : null}
         </div>
       ))}
       <Card>

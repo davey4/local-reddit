@@ -1,4 +1,4 @@
-const { Thread, User, Comments } = require("../models");
+const { Thread, User, Comments, Sub_Comment } = require("../models");
 
 const CreateThread = async (req, res) => {
   try {
@@ -52,17 +52,82 @@ const GetAllThreads = async (req, res) => {
   }
 };
 
+const recursiveJoin = async (req, res) => {
+  try {
+    // let state = true;
+    const comment = await Sub_Comment.findAll({
+      // as: "subComments",
+      where: { sub_comment_id: req.body },
+    });
+    if (comment) {
+      // recursiveJoin(comment.id);
+      res.send(comment);
+    } else {
+      // recursiveJoin(comment.id);
+      res.send({ msg: "nope" });
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 const GetThread = async (req, res) => {
   try {
     let id = parseInt(req.params.thread_id);
     const thread = await Thread.findOne({
       where: { id: id },
       include: [
-        { model: User, attrbutes: ["id", "user_name", "avatar"] },
+        { model: User, attributes: ["id", "user_name", "avatar"] },
         {
           order: [["createdAt", "DESC"]],
           model: Comments,
-          include: [{ model: User, attributes: ["id", "user_name", "avatar"] }],
+          include: [
+            {
+              model: Comments,
+              as: "subComments",
+              include: [
+                { model: User, attributes: ["id", "user_name", "avatar"] },
+                {
+                  model: Comments,
+                  as: "subComments",
+                  include: [
+                    { model: User, attributes: ["id", "user_name", "avatar"] },
+                    {
+                      model: Comments,
+                      as: "subComments",
+                      include: [
+                        {
+                          model: User,
+                          attributes: ["id", "user_name", "avatar"],
+                        },
+                      ],
+                    },
+                    {
+                      model: Comments,
+                      as: "subComments",
+                      include: [
+                        {
+                          model: User,
+                          attributes: ["id", "user_name", "avatar"],
+                        },
+                      ],
+                    },
+                    {
+                      model: Comments,
+                      as: "subComments",
+                      include: [
+                        {
+                          model: User,
+                          attributes: ["id", "user_name", "avatar"],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+            { model: User, attributes: ["id", "user_name", "avatar"] },
+          ],
         },
       ],
     });
