@@ -108,25 +108,25 @@ const Forum = (props) => {
   };
 
   const recursiveComments = (el) => {
-    if (el.subComments) {
-      return el.subComments.map((sub, i) => (
-        <div key={sub.id} className={classes.indent}>
-          <Comments
-            id={sub.id}
-            userName={sub.User.user_name}
-            content={sub.content}
-            points={sub.points}
-            currentUser={props.currentUser}
-            userId={sub.user_id}
-            getThread={getThread}
-            avatar={sub.User.avatar}
-          />
-          {el.subComments.length > 0
-            ? recursiveComments(el.subComments[i])
-            : null}
-        </div>
-      ));
-    }
+    return el.subComments.map((sub, i) => (
+      <div key={sub.id} className={classes.indent}>
+        <Comments
+          id={sub.id}
+          userName={sub.User.user_name}
+          content={sub.content}
+          points={sub.points}
+          currentUser={props.currentUser}
+          userId={sub.user_id}
+          getThread={getThread}
+          avatar={sub.User.avatar}
+          threadId={props.location.state}
+          currentUserName={props.currentUserName}
+        />
+        {el.subComments.length > 0
+          ? recursiveComments(el.subComments[i])
+          : null}
+      </div>
+    ));
   };
 
   return (
@@ -143,6 +143,8 @@ const Forum = (props) => {
             userId={el.user_id}
             getThread={getThread}
             avatar={el.User.avatar}
+            threadId={props.location.state}
+            currentUserName={props.currentUserName}
           />
           {el.subComments.length > 0 ? recursiveComments(el) : null}
         </div>

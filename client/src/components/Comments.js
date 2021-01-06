@@ -20,6 +20,8 @@ import {
   __CommentOnComment,
 } from "../services/CommentServices";
 
+import { __CreateNotification } from "../services/NotificationServices";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
@@ -105,9 +107,22 @@ const Comments = (props) => {
         content: content,
       };
       await __CommentOnComment(props.currentUser, props.id, data);
+      createNotif();
       props.getThread();
       setContent("");
       setAddComment(false);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const createNotif = async () => {
+    try {
+      let message = `${props.currentUserName} replied to your comment`;
+      const data = {
+        message: message,
+      };
+      await __CreateNotification(props.userId, props.threadId, data);
     } catch (error) {
       throw error;
     }
