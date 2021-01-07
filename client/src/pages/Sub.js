@@ -10,6 +10,8 @@ import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
 import SearchIcon from "@material-ui/icons/Search";
 
+import Filtered from "../components/Filtered";
+
 import { __GetAllSubs, __CreateSub } from "../services/SubServices";
 import { __CreateSubscrip, __UnSub } from "../services/SubscriptionServices";
 
@@ -98,7 +100,8 @@ const Sub = (props) => {
   const subscribe = async (id) => {
     try {
       await __CreateSubscrip(props.currentUser, id);
-      getSubs();
+      // getSubs();
+      console.log("cli");
     } catch (error) {
       throw error;
     }
@@ -107,7 +110,8 @@ const Sub = (props) => {
   const unSubscribe = async (id) => {
     try {
       await __UnSub(props.currentUser, id);
-      getSubs();
+      // getSubs();
+      console.log("cli");
     } catch (error) {
       throw error;
     }
@@ -175,55 +179,20 @@ const Sub = (props) => {
 
       {filteredSubs.length > 0 ? (
         filteredSubs.map((el, i) => (
-          <Card className={classes.root} key={el.id}>
-            <CardContent>
-              <Typography
-                className={classes.title}
-                color="textSecondary"
-                gutterBottom
-              >
-                Area
-              </Typography>
-              <Typography variant="h5" component="h2">
-                {el.name}
-              </Typography>
-              <Typography className={classes.pos} color="textSecondary">
-                Created By:
-              </Typography>
-              <Typography
-                className={classes.inline}
-                variant="body1"
-                component="p"
-              >
-                <Avatar
-                  alt={el.User.id}
-                  src={el.User.avatar}
-                  className={classes.small}
-                />
-                {el.User.user_name}
-              </Typography>
-            </CardContent>
-            {props.currentUser ? (
-              el.Subscriptions.find(
-                (el) => el.user_id === props.currentUser
-              ) ? (
-                <CardActions>
-                  <Button onClick={() => unSubscribe(el.id)}>
-                    UnSubscribe
-                  </Button>
-                </CardActions>
-              ) : (
-                <CardActions>
-                  <Button onClick={() => subscribe(el.id)}>Subscribe</Button>
-                </CardActions>
-              )
-            ) : null}
-            <CardActions>
-              <Button size="small" onClick={() => onClick(i)}>
-                Find discussions
-              </Button>
-            </CardActions>
-          </Card>
+          <div key={el.id}>
+            <Filtered
+              name={el.name}
+              avatar={el.User.avatar}
+              userName={el.User.user_name}
+              currentUser={props.currentUser}
+              sub={el}
+              subscribe={subscribe}
+              unSubscribe={unSubscribe}
+              onClick={onClick}
+              i={i}
+              id={el.id}
+            />
+          </div>
         ))
       ) : (
         <h4>No matching Results</h4>
