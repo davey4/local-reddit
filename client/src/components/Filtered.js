@@ -5,10 +5,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import AddBoxIcon from "@material-ui/icons/AddBox";
-import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
-import SearchIcon from "@material-ui/icons/Search";
 
 const useStyles = makeStyles((theme) => ({
   root: {
