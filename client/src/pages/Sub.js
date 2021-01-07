@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import TextField from "@material-ui/core/TextField";
 import Avatar from "@material-ui/core/Avatar";
+import SearchIcon from "@material-ui/icons/Search";
 
 import { __GetAllSubs, __CreateSub } from "../services/SubServices";
 import { __CreateSubscrip, __UnSub } from "../services/SubscriptionServices";
@@ -37,6 +38,9 @@ const Sub = (props) => {
   const [add, setAdd] = useState(false);
   const [name, setName] = useState("");
 
+  const [search, setSearch] = useState("");
+  const [filteredSubs, setFilteredSubs] = useState([]);
+
   useEffect(() => {
     getSubs();
   }, []);
@@ -45,6 +49,7 @@ const Sub = (props) => {
     try {
       const data = await __GetAllSubs();
       setSub(data);
+      setFilteredSubs(data);
     } catch (error) {
       throw error;
     }
@@ -79,7 +84,14 @@ const Sub = (props) => {
   };
 
   const onChange = ({ target }) => {
-    setName(target.value);
+    switch (target.name) {
+      case "name":
+        return setName(target.value);
+      case "search":
+        return setSearch(target.value);
+      default:
+        return;
+    }
   };
 
   const subscribe = async (id) => {
@@ -100,6 +112,15 @@ const Sub = (props) => {
     }
   };
 
+  const filter = (e) => {
+    e.preventDefault();
+    let filtered = sub.filter((s) =>
+      s.name.toLowerCase().includes(search.toLowerCase())
+    );
+    setFilteredSubs(filtered);
+    setSearch("");
+  };
+
   return (
     <section>
       {props.currentUser ? (
@@ -114,6 +135,7 @@ const Sub = (props) => {
               <TextField
                 id="outlined-full-width"
                 style={{ margin: 10 }}
+                name="name"
                 placeholder="Area"
                 fullWidth
                 margin="normal"
@@ -129,7 +151,27 @@ const Sub = (props) => {
           ) : null}
         </Card>
       ) : null}
-      {sub.map((el, i) => (
+      <form className={classes.inline} onSubmit={filter}>
+        <TextField
+          id="searchBar"
+          label="Search"
+          name="search"
+          style={{ margin: 10 }}
+          placeholder="Search"
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+          value={search}
+          onChange={onChange}
+        />
+        <Button type="submit">
+          <SearchIcon />
+        </Button>
+      </form>
+      {filteredSubs.map((el, i) => (
         <Card className={classes.root} key={el.id}>
           <CardContent>
             <Typography
