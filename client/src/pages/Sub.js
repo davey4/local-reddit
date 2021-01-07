@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inline: {
     display: "flex",
+    marginTop: 12,
   },
   small: {
     width: theme.spacing(2.5),
@@ -123,8 +124,28 @@ const Sub = (props) => {
 
   return (
     <section>
+      <form className={classes.inline} onSubmit={filter}>
+        <TextField
+          id="searchBar"
+          label="Search"
+          name="search"
+          style={{ margin: 10 }}
+          placeholder="Search"
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+          value={search}
+          onChange={onChange}
+        />
+        <Button type="submit">
+          <SearchIcon />
+        </Button>
+      </form>
       {props.currentUser ? (
-        <Card variant="outlined">
+        <Card>
           <CardActions>
             <Button size="large" onClick={() => setAdd(!add)}>
               <AddBoxIcon /> Add Area
@@ -151,26 +172,7 @@ const Sub = (props) => {
           ) : null}
         </Card>
       ) : null}
-      <form className={classes.inline} onSubmit={filter}>
-        <TextField
-          id="searchBar"
-          label="Search"
-          name="search"
-          style={{ margin: 10 }}
-          placeholder="Search"
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-          value={search}
-          onChange={onChange}
-        />
-        <Button type="submit">
-          <SearchIcon />
-        </Button>
-      </form>
+
       {filteredSubs.map((el, i) => (
         <Card className={classes.root} key={el.id}>
           <CardContent>

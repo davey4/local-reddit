@@ -106,7 +106,7 @@ const Threads = (props) => {
     <section>
       <h1>{props.location.state.area}</h1>
       {props.currentUser ? (
-        <Card variant="outlined">
+        <Card>
           <CardActions>
             <Button size="large" onClick={() => setAdd(!add)}>
               <AddBoxIcon /> Add Thread
