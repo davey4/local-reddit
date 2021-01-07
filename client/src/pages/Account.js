@@ -281,9 +281,11 @@ const Account = (props) => {
                   />
                 </Button>
               ))}
-              <Button onClick={updateUser} size="small">
-                Update
-              </Button>
+              <CardActions>
+                <Button onClick={updateUser} size="small">
+                  Update
+                </Button>
+              </CardActions>
             </div>
           ) : (
             <Button onClick={() => setUpdate(!update)} size="small">
