@@ -56,4 +56,4 @@ Deployment coming soon!
 ### Credits
 
 - LucidChart
-- Materialize
+- Material UI
