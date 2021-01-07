@@ -26,7 +26,7 @@ A site where users can ask questions and start conversations with locals in thei
 
 Get started by signing up!
 
-Deployment coming soon!
+Deployed to [Heroku](https://localizing1.herokuapp.com/)
 
 ---
 
@@ -38,18 +38,6 @@ Deployment coming soon!
 - User will be able to create threads and sub-threads
 - User will be able to comment on sub-threads and comments
 - User will be able to up vote / down vote comments and sub-threads
-
----
-
-### ERD
-
-![ERD](https://lucid.app/publicSegments/view/67860812-281a-49fa-8a09-674820fadb04/image.png)
-
----
-
-### Component Hierarchy Diagram
-
-![Component Hierarchy Diagram](https://lucid.app/publicSegments/view/0b0e2ab6-9a17-4d1b-948b-71ec3584ba81/image.png)
 
 ---
 
