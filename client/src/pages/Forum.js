@@ -132,23 +132,27 @@ const Forum = (props) => {
   return (
     <section>
       <h1>{title}</h1>
-      {comments.map((el) => (
-        <div key={el.id}>
-          <Comments
-            id={el.id}
-            userName={el.User.user_name}
-            content={el.content}
-            points={el.points}
-            currentUser={props.currentUser}
-            userId={el.user_id}
-            getThread={getThread}
-            avatar={el.User.avatar}
-            threadId={props.location.state}
-            currentUserName={props.currentUserName}
-          />
-          {el.subComments.length > 0 ? recursiveComments(el) : null}
-        </div>
-      ))}
+      {comments ? (
+        comments.map((el) => (
+          <div key={el.id}>
+            <Comments
+              id={el.id}
+              userName={el.User.user_name}
+              content={el.content}
+              points={el.points}
+              currentUser={props.currentUser}
+              userId={el.user_id}
+              getThread={getThread}
+              avatar={el.User.avatar}
+              threadId={props.location.state}
+              currentUserName={props.currentUserName}
+            />
+            {el.subComments.length > 0 ? recursiveComments(el) : null}
+          </div>
+        ))
+      ) : (
+        <h4>No Comments</h4>
+      )}
       <Card>
         {addComment ? (
           <form

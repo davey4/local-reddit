@@ -11,6 +11,7 @@ module.exports = {
       sub_comment_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        onDelete: "CASCADE",
         references: {
           model: "comments",
           key: "id",
@@ -19,6 +20,7 @@ module.exports = {
       comment_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        onDelete: "CASCADE",
         references: {
           model: "comments",
           key: "id",

@@ -173,53 +173,61 @@ const Sub = (props) => {
         </Card>
       ) : null}
 
-      {filteredSubs.map((el, i) => (
-        <Card className={classes.root} key={el.id}>
-          <CardContent>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-            >
-              Area
-            </Typography>
-            <Typography variant="h5" component="h2">
-              {el.name}
-            </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-              Created By:
-            </Typography>
-            <Typography
-              className={classes.inline}
-              variant="body1"
-              component="p"
-            >
-              <Avatar
-                alt={el.User.id}
-                src={el.User.avatar}
-                className={classes.small}
-              />
-              {el.User.user_name}
-            </Typography>
-          </CardContent>
-          {props.currentUser ? (
-            el.Subscriptions.find((el) => el.user_id === props.currentUser) ? (
-              <CardActions>
-                <Button onClick={() => unSubscribe(el.id)}>UnSubscribe</Button>
-              </CardActions>
-            ) : (
-              <CardActions>
-                <Button onClick={() => subscribe(el.id)}>Subscribe</Button>
-              </CardActions>
-            )
-          ) : null}
-          <CardActions>
-            <Button size="small" onClick={() => onClick(i)}>
-              Find discussions
-            </Button>
-          </CardActions>
-        </Card>
-      ))}
+      {filteredSubs.length > 0 ? (
+        filteredSubs.map((el, i) => (
+          <Card className={classes.root} key={el.id}>
+            <CardContent>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                Area
+              </Typography>
+              <Typography variant="h5" component="h2">
+                {el.name}
+              </Typography>
+              <Typography className={classes.pos} color="textSecondary">
+                Created By:
+              </Typography>
+              <Typography
+                className={classes.inline}
+                variant="body1"
+                component="p"
+              >
+                <Avatar
+                  alt={el.User.id}
+                  src={el.User.avatar}
+                  className={classes.small}
+                />
+                {el.User.user_name}
+              </Typography>
+            </CardContent>
+            {props.currentUser ? (
+              el.Subscriptions.find(
+                (el) => el.user_id === props.currentUser
+              ) ? (
+                <CardActions>
+                  <Button onClick={() => unSubscribe(el.id)}>
+                    UnSubscribe
+                  </Button>
+                </CardActions>
+              ) : (
+                <CardActions>
+                  <Button onClick={() => subscribe(el.id)}>Subscribe</Button>
+                </CardActions>
+              )
+            ) : null}
+            <CardActions>
+              <Button size="small" onClick={() => onClick(i)}>
+                Find discussions
+              </Button>
+            </CardActions>
+          </Card>
+        ))
+      ) : (
+        <h4>No matching Results</h4>
+      )}
     </section>
   );
 };
