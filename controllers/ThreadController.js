@@ -60,7 +60,7 @@ const GetThread = async (req, res) => {
       include: [
         { model: User, attributes: ["id", "user_name", "avatar"] },
         {
-          order: [["createdAt", "DESC"]],
+          order: [["points", "DESC"]],
           model: Comments,
           include: [
             {
@@ -111,6 +111,7 @@ const GetThread = async (req, res) => {
           ],
         },
       ],
+      order: [[{ model: Comments }, "points", "DESC"]],
     });
     res.send(thread);
   } catch (error) {
