@@ -51,8 +51,8 @@ const Sub = (props) => {
   const getSubs = async () => {
     try {
       const data = await __GetAllSubs();
-      setSub(data);
       setFilteredSubs(data);
+      setSub(data);
     } catch (error) {
       throw error;
     }
@@ -100,8 +100,6 @@ const Sub = (props) => {
   const subscribe = async (id) => {
     try {
       await __CreateSubscrip(props.currentUser, id);
-      // getSubs();
-      console.log("cli");
     } catch (error) {
       throw error;
     }
@@ -110,8 +108,6 @@ const Sub = (props) => {
   const unSubscribe = async (id) => {
     try {
       await __UnSub(props.currentUser, id);
-      // getSubs();
-      console.log("cli");
     } catch (error) {
       throw error;
     }
