@@ -123,6 +123,18 @@ const GetAvatars = async (req, res) => {
   }
 };
 
+const GetAll = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: ["id", ["user_name", "display"]],
+    });
+
+    res.send(users);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   CreateUser,
   LoginUser,
@@ -131,4 +143,5 @@ module.exports = {
   UpdateUser,
   UpdatePassword,
   GetAvatars,
+  GetAll,
 };
