@@ -255,19 +255,6 @@ const Comments = (props) => {
                 data={data}
               />
             </MentionsInput>
-            {/* <TextField
-              id="outlined-full-width"
-              style={{ margin: 10 }}
-              placeholder="Reply"
-              fullWidth
-              margin="normal"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="outlined"
-              value={content}
-              onChange={onChange}
-            /> */}
             <CardActions>
               <Button size="small" type="submit">
                 Reply
