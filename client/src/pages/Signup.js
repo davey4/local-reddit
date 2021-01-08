@@ -82,7 +82,7 @@ export default function Signup(props) {
             loginData.user.id,
             loginData.user.user_name
           );
-          props.history.push("/sub");
+          props.history.push("/subscriptions");
         } catch (error) {
           setUnique(true);
         }

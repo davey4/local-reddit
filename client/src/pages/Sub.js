@@ -76,8 +76,8 @@ const Sub = (props) => {
     let location = {
       pathname: "/threads",
       state: {
-        id: sub[i].id,
-        area: sub[i].name,
+        id: filteredSubs[i].id,
+        area: filteredSubs[i].name,
       },
     };
     props.history.push(location);
