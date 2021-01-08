@@ -7,11 +7,16 @@ import TextField from "@material-ui/core/TextField";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
+import { MentionsInput, Mention } from "react-mentions";
+import defaultStyle from "../components/DefaultMentionsStyle";
+import mentionsStyle from "../components/defaultStyle";
+
 import Comments from "../components/Comments";
 
 import { __GetThread } from "../services/ThreadServices";
 import { __CreateComment } from "../services/CommentServices";
 import { __CreateNotification } from "../services/NotificationServices";
+import { __GetAll } from "../services/UserServices";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -41,10 +46,21 @@ const Forum = (props) => {
   const [content, setContent] = useState("");
   const [open, setOpen] = useState(false);
   const [id, setId] = useState();
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     getThread();
+    getAll();
   }, []);
+
+  const getAll = async () => {
+    try {
+      const users = await __GetAll();
+      setData(users);
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -74,11 +90,23 @@ const Forum = (props) => {
     if (props.currentUser) {
       if (content) {
         try {
-          const data = {
+          let newComment = content;
+          newComment = newComment
+            .split("@@@__")
+            .join(`<span style='color:blue'>`);
+          newComment = newComment.split("@@@^^^").join("</span>");
+          if (content != newComment) {
+            let tagged = content.split(" ");
+            tagged = tagged.find((el) => el.includes("@@@__"));
+            tagged = tagged.replace(/[^a-zA-Z0-9 ]/g, "");
+            tagged = data.find((el) => el.display === tagged);
+            taggedNotif(tagged.id);
+          }
+          const msg = {
             threadId: props.location.state,
-            content: content,
+            content: newComment,
           };
-          await __CreateComment(props.currentUser, data);
+          await __CreateComment(props.currentUser, msg);
           createNotif();
           getThread();
           setContent("");
@@ -92,6 +120,19 @@ const Forum = (props) => {
     } else {
       setOpen(true);
       setAddComment(false);
+    }
+  };
+
+  const taggedNotif = async (id) => {
+    console.log(id);
+    try {
+      let message = `${props.currentUserName} mentioned you in a comment`;
+      const data = {
+        message: message,
+      };
+      await __CreateNotification(id, props.location.state, data);
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -132,6 +173,44 @@ const Forum = (props) => {
   return (
     <section>
       <h1>{title}</h1>
+      <Card>
+        {addComment ? (
+          <form
+            className={classes.root}
+            noValidate
+            autoComplete="off"
+            onSubmit={commentThread}
+          >
+            <div>
+              <MentionsInput
+                style={defaultStyle}
+                value={content}
+                onChange={onChange}
+                placeholder="Reply"
+              >
+                <Mention
+                  trigger="@"
+                  style={mentionsStyle}
+                  markup={"@@@____display__@@@^^^"}
+                  data={data}
+                  allowSuggestionsAboveCursor={true}
+                />
+              </MentionsInput>
+            </div>
+            <CardActions>
+              <Button size="small" type="submit">
+                Reply
+              </Button>
+            </CardActions>
+          </form>
+        ) : (
+          <CardActions>
+            <Button size="small" onClick={() => setAddComment(!addComment)}>
+              Reply
+            </Button>
+          </CardActions>
+        )}
+      </Card>
       {comments ? (
         comments.map((el) => (
           <div key={el.id}>
@@ -153,41 +232,7 @@ const Forum = (props) => {
       ) : (
         <h4>No Comments</h4>
       )}
-      <Card>
-        {addComment ? (
-          <form
-            className={classes.root}
-            noValidate
-            autoComplete="off"
-            onSubmit={commentThread}
-          >
-            <TextField
-              id="outlined-full-width"
-              style={{ margin: 10 }}
-              placeholder="Reply"
-              fullWidth
-              margin="normal"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="outlined"
-              value={content}
-              onChange={onChange}
-            />
-            <CardActions>
-              <Button size="small" type="submit">
-                Reply
-              </Button>
-            </CardActions>
-          </form>
-        ) : (
-          <CardActions>
-            <Button size="small" onClick={() => setAddComment(!addComment)}>
-              Reply
-            </Button>
-          </CardActions>
-        )}
-      </Card>
+
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error">
           Please Login First!

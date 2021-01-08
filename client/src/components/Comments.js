@@ -124,27 +124,33 @@ const Comments = (props) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    try {
-      let newComment = content;
-      newComment = newComment.split("@@@__").join(`<span style='color:blue'>`);
-      newComment = newComment.split("@@@^^^").join("</span>");
-      if (content != newComment) {
-        let tagged = content.split(" ");
-        tagged = tagged.find((el) => el.includes("@@@__"));
-        tagged = tagged.replace(/[^a-zA-Z0-9 ]/g, "");
-        tagged = data.find((el) => el.display === tagged);
-        taggedNotif(tagged.id);
+    if (content) {
+      try {
+        let newComment = content;
+        newComment = newComment
+          .split("@@@__")
+          .join(`<span style='color:blue'>`);
+        newComment = newComment.split("@@@^^^").join("</span>");
+        if (content != newComment) {
+          let tagged = content.split(" ");
+          tagged = tagged.find((el) => el.includes("@@@__"));
+          tagged = tagged.replace(/[^a-zA-Z0-9 ]/g, "");
+          tagged = data.find((el) => el.display === tagged);
+          taggedNotif(tagged.id);
+        }
+        const msg = {
+          content: newComment,
+        };
+        await __CommentOnComment(props.currentUser, props.id, msg);
+        createNotif();
+        props.getThread();
+        setContent("");
+        setAddComment(false);
+      } catch (error) {
+        throw error;
       }
-      const msg = {
-        content: newComment,
-      };
-      await __CommentOnComment(props.currentUser, props.id, msg);
-      createNotif();
-      props.getThread();
-      setContent("");
+    } else {
       setAddComment(false);
-    } catch (error) {
-      throw error;
     }
   };
 
@@ -247,6 +253,7 @@ const Comments = (props) => {
               value={content}
               onChange={onChange}
               placeholder="Reply"
+              allowSuggestionsAboveCursor={true}
             >
               <Mention
                 trigger="@"
