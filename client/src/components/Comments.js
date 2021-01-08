@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -12,6 +12,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import Avatar from "@material-ui/core/Avatar";
 
+import { MentionsInput, Mention } from "react-mentions";
+import defaultStyle from "./DefaultMentionsStyle";
+import mentionsStyle from "../components/defaultStyle";
+
 import {
   __DownVoteComment,
   __UpVoteComment,
@@ -21,6 +25,7 @@ import {
 } from "../services/CommentServices";
 
 import { __CreateNotification } from "../services/NotificationServices";
+import { __GetAll } from "../services/UserServices";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
   pos: {
     marginBottom: 12,
   },
+  backgroundColor: {
+    backgroundColor: "#daf4fa",
+  },
 }));
 
 const Comments = (props) => {
@@ -46,6 +54,20 @@ const Comments = (props) => {
   const [content, setContent] = useState("");
   const [edit, setEdit] = useState(false);
   const [addComment, setAddComment] = useState(false);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
+  const getAll = async () => {
+    try {
+      const users = await __GetAll();
+      setData(users);
+    } catch (error) {
+      throw error;
+    }
+  };
 
   const upVote = async (id) => {
     try {
@@ -103,14 +125,36 @@ const Comments = (props) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = {
-        content: content,
+      let newComment = content;
+      newComment = newComment.split("@@@__").join(`<span style='color:blue'>`);
+      newComment = newComment.split("@@@^^^").join("</span>");
+      if (content != newComment) {
+        let tagged = content.split(" ");
+        tagged = tagged.find((el) => el.includes("@@@__"));
+        tagged = tagged.replace(/[^a-zA-Z0-9 ]/g, "");
+        tagged = data.find((el) => el.display === tagged);
+        taggedNotif(tagged.id);
+      }
+      const msg = {
+        content: newComment,
       };
-      await __CommentOnComment(props.currentUser, props.id, data);
+      await __CommentOnComment(props.currentUser, props.id, msg);
       createNotif();
       props.getThread();
       setContent("");
       setAddComment(false);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const taggedNotif = async (id) => {
+    try {
+      let message = `${props.currentUserName} mentioned you in a comment`;
+      const data = {
+        message: message,
+      };
+      await __CreateNotification(id, props.threadId, data);
     } catch (error) {
       throw error;
     }
@@ -162,7 +206,11 @@ const Comments = (props) => {
           </form>
         ) : (
           <Typography variant="h5" component="h2">
-            {props.content}
+            <p
+              dangerouslySetInnerHTML={{
+                __html: props.content.replace(/\n\r?/g, "<br />"),
+              }}
+            />
           </Typography>
         )}
       </CardContent>
@@ -194,7 +242,20 @@ const Comments = (props) => {
             autoComplete="off"
             onSubmit={onSubmit}
           >
-            <TextField
+            <MentionsInput
+              style={defaultStyle}
+              value={content}
+              onChange={onChange}
+              placeholder="Reply"
+            >
+              <Mention
+                trigger="@"
+                style={mentionsStyle}
+                markup={"@@@____display__@@@^^^"}
+                data={data}
+              />
+            </MentionsInput>
+            {/* <TextField
               id="outlined-full-width"
               style={{ margin: 10 }}
               placeholder="Reply"
@@ -206,7 +267,7 @@ const Comments = (props) => {
               variant="outlined"
               value={content}
               onChange={onChange}
-            />
+            /> */}
             <CardActions>
               <Button size="small" type="submit">
                 Reply

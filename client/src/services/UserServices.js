@@ -63,3 +63,12 @@ export const __GetAvatars = async () => {
     throw error;
   }
 };
+
+export const __GetAll = async () => {
+  try {
+    const res = await ApiClient.get("/user/find/all");
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
