@@ -1,4 +1,4 @@
-const { Comments, Sub_Comment } = require("../models");
+const { Comments, Sub_Comment, User } = require("../models");
 
 const CreateComment = async (req, res) => {
   try {
@@ -89,6 +89,55 @@ const UnlikeComment = async (req, res) => {
   }
 };
 
+const GetMoreComments = async (req, res) => {
+  try {
+    let commentId = parseInt(req.params.comment_id);
+    const comments = await Sub_Comment.findAll({
+      where: { sub_comment_id: commentId },
+      include: [
+        {
+          model: Comments,
+          include: [
+            { model: User, attributes: ["id", "user_name", "avatar"] },
+            {
+              model: Comments,
+              as: "subComments",
+              include: [
+                { model: User, attributes: ["id", "user_name", "avatar"] },
+                {
+                  model: Comments,
+                  as: "subComments",
+                  include: [
+                    { model: User, attributes: ["id", "user_name", "avatar"] },
+                  ],
+                },
+                {
+                  model: Comments,
+                  as: "subComments",
+                  include: [
+                    { model: User, attributes: ["id", "user_name", "avatar"] },
+                  ],
+                },
+                {
+                  model: Comments,
+                  as: "subComments",
+                  include: [
+                    { model: User, attributes: ["id", "user_name", "avatar"] },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      order: [[{ model: Comments }, "points", "DESC"]],
+    });
+    res.send(comments);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   CreateComment,
   CommentOnComment,
@@ -96,4 +145,5 @@ module.exports = {
   DeleteComment,
   LikeComment,
   UnlikeComment,
+  GetMoreComments,
 };

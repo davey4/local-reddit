@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -14,7 +13,10 @@ import mentionsStyle from "../components/defaultStyle";
 import Comments from "../components/Comments";
 
 import { __GetThread } from "../services/ThreadServices";
-import { __CreateComment } from "../services/CommentServices";
+import {
+  __CreateComment,
+  __GetMoreComments,
+} from "../services/CommentServices";
 import { __CreateNotification } from "../services/NotificationServices";
 import { __GetAll } from "../services/UserServices";
 
@@ -148,26 +150,41 @@ const Forum = (props) => {
     }
   };
 
+  const getMoreComments = async (id) => {
+    try {
+      const data = await __GetMoreComments(id);
+      // console.log(data);
+      if (data) {
+        data.forEach((el) => {
+          console.log(el.Comment);
+          // recursiveComments(el.Comment);
+        });
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const recursiveComments = (el) => {
-    return el.subComments.map((sub, i) => (
-      <div key={sub.id} className={classes.indent}>
-        <Comments
-          id={sub.id}
-          userName={sub.User.user_name}
-          content={sub.content}
-          points={sub.points}
-          currentUser={props.currentUser}
-          userId={sub.user_id}
-          getThread={getThread}
-          avatar={sub.User.avatar}
-          threadId={props.location.state}
-          currentUserName={props.currentUserName}
-        />
-        {el.subComments.length > 0
-          ? recursiveComments(el.subComments[i])
-          : null}
-      </div>
-    ));
+    if (el.subComments) {
+      return el.subComments.map((sub, i) => (
+        <div key={sub.id} className={classes.indent}>
+          <Comments
+            id={sub.id}
+            userName={sub.User.user_name}
+            content={sub.content}
+            points={sub.points}
+            currentUser={props.currentUser}
+            userId={sub.user_id}
+            getThread={getThread}
+            avatar={sub.User.avatar}
+            threadId={props.location.state}
+            currentUserName={props.currentUserName}
+          />
+          {sub.subComments ? recursiveComments(el.subComments[i]) : null}
+        </div>
+      ));
+    }
   };
 
   return (

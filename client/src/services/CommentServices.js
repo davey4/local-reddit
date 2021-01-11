@@ -56,3 +56,12 @@ export const __CommentOnComment = async (userId, parentId, data) => {
     throw error;
   }
 };
+
+export const __GetMoreComments = async (commentId) => {
+  try {
+    const res = await ApiClient.get(`/comment/${commentId}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};

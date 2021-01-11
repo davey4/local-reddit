@@ -8,7 +8,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Sub_Comment.belongsTo(models.Comments, {
+        foreignKey: "sub_comment_id",
+      });
     }
   }
   Sub_Comment.init(
